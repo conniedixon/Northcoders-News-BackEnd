@@ -13,12 +13,13 @@ describe("APP/API:", () => {
   });
   describe("/TOPICS:", () => {
     describe("GET", () => {
-      it("Request to get all topics = Status 200: returns an array of topics", () => {
+      it("Status 200: returns an array of topics", () => {
         return request(app)
           .get("/api/topics")
           .expect(200)
           .then(({ body: { topics } }) => {
             expect(topics).to.be.an("array");
+            expect(topics[0]).to.contain.keys("slug", "description");
           });
       });
       it("Status 404: Path not found", () => {
