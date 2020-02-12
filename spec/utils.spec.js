@@ -120,6 +120,101 @@ describe("formatDates", () => {
   });
 });
 
-describe("makeRefObj", () => {});
+describe("makeRefObj", () => {
+  it("Given an array, returns an object", () => {
+    expect(makeRefObj([{}])).to.be.an("object");
+  });
+  it("(One item) should return a key of the items' title with a value of the items' article id", () => {
+    expect(
+      makeRefObj([
+        {
+          article_id: 11,
+          title: "Am I a cat?",
+          topic: "mitch",
+          author: "icellusedkars",
+          body:
+            "Having run out of ideas for articles, I am staring at the wall blankly, like a cat. Does this make me a cat?",
+          created_at: "1978-11-25T12:21:54.000Z",
+          votes: 0
+        }
+      ])
+    ).to.eql({ "Am I a cat?": 11 });
+  });
+  it("(Multiple items) should return a key of the items' title with a value of the items' article id for each object in the array", () => {
+    const input = [
+      {
+        article_id: 3,
+        title: "Eight pug gifs that remind me of mitch",
+        topic: "mitch",
+        author: "icellusedkars",
+        body: "some gifs",
+        created_at: "2010-11-17T12:21:54.000Z",
+        votes: 0
+      },
+      {
+        article_id: 5,
+        title: "UNCOVERED: catspiracy to bring down democracy",
+        topic: "cats",
+        author: "rogersop",
+        body: "Bastet walks amongst us, and the cats are taking arms!",
+        created_at: "2002-11-19T12:21:54.000Z",
+        votes: 0
+      },
+      {
+        article_id: 6,
+        title: "A",
+        topic: "mitch",
+        author: "icellusedkars",
+        body: "Delicious tin of cat food",
+        created_at: "1998-11-20T12:21:54.000Z",
+        votes: 0
+      }
+    ];
+    expect(makeRefObj(input)).to.eql({
+      "Eight pug gifs that remind me of mitch": 3,
+      "UNCOVERED: catspiracy to bring down democracy": 5,
+      A: 6
+    });
+  });
+  it("Does not mutate the original array", () => {
+    let input = [
+      {
+        article_id: 1,
+        title: "Living in the shadow of a great man",
+        topic: "mitch",
+        author: "butter_bridge",
+        body: "I find this existence challenging",
+        created_at: "2018-11-15T12:21:54.000Z",
+        votes: 100
+      }
+    ];
+    makeRefObj(input);
+    expect(input).to.eql([
+      {
+        article_id: 1,
+        title: "Living in the shadow of a great man",
+        topic: "mitch",
+        author: "butter_bridge",
+        body: "I find this existence challenging",
+        created_at: "2018-11-15T12:21:54.000Z",
+        votes: 100
+      }
+    ]);
+  });
+  it("Returns a new object", () => {
+    const input = [
+      {
+        article_id: 1,
+        title: "Living in the shadow of a great man",
+        topic: "mitch",
+        author: "butter_bridge",
+        body: "I find this existence challenging",
+        created_at: "2018-11-15T12:21:54.000Z",
+        votes: 100
+      }
+    ];
+    expect(makeRefObj(input)).not.to.eql(input);
+  });
+});
 
 describe("formatComments", () => {});
