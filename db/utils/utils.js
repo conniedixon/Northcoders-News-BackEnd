@@ -23,4 +23,23 @@ exports.makeRefObj = list => {
   return referenceObject;
 };
 
-exports.formatComments = (comments, articleRef) => {};
+exports.formatComments = (comments, articleRef) => {
+  const commentsCopy = comments.map(item => {
+    return { ...item };
+  });
+
+  commentsCopy.forEach(item => {
+    item.author = item.created_by;
+
+    const keys = Object.keys(articleRef);
+    const foundId = keys.forEach(key => {
+      if (key === item.belongs_to) item.article_id = articleRef[key];
+    });
+
+    delete item.belongs_to;
+    delete item.created_by;
+    return item;
+  });
+
+  return commentsCopy;
+};

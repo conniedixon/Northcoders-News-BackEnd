@@ -28,10 +28,18 @@ exports.seed = function(knex) {
         .returning("*");
     })
     .then(articleRows => {
-      console.log(articleRows);
-      let formattedCommentDates = formatDates(commentData);
-      let formattedCommentData = formatComments(formattedCommentDates);
-
+      let formattedCommentData = formatDates(commentData);
+      let referenceObj = makeRefObj(articleRows);
+      console.log(
+        referenceObj,
+        "<-- refObj",
+        formattedCommentData,
+        "<-- comment data"
+      );
+      formattedCommentData = formatComments(formattedCommentData, referenceObj);
+      return knex("comments")
+        .insert(formattedCommentData)
+        .returning("*");
       /* 
 
       Your comment data is currently in the incorrect format and will violate your SQL schema. 
