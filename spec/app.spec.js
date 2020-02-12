@@ -9,8 +9,16 @@ describe("APP/API:", () => {
         return request(app)
           .get("/api/topics")
           .expect(200)
-          .then(({ body }) => {
-            expect(body.topics).to.be.an("array");
+          .then(({ body: { topics } }) => {
+            expect(topics).to.be.an("array");
+          });
+      });
+      it("Status 404: Path not found", () => {
+        return request(app)
+          .get("/api/topix")
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.eql("Path not found");
           });
       });
     });
