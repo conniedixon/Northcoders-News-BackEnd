@@ -5,7 +5,7 @@ exports.up = function(knex) {
     articlesTable.string("title").notNullable();
     articlesTable.string("topic").references("topics.slug");
     articlesTable.string("author").references("users.username");
-    articlesTable.string("body").notNullable();
+    articlesTable.text("body").notNullable();
     articlesTable
       .timestamp("created_at", { precision: 6 })
       .defaultTo(knex.fn.now(6));
