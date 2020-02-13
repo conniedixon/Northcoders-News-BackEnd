@@ -6,6 +6,8 @@ const {
   incrementArticleVotes
 } = require("../controllers/articlesControllers.js");
 
+const { articleCommentsRouter } = require("./articleCommentsRouter");
+
 articleIdRouter
   .route("/")
   .get(getArticleById)
@@ -15,5 +17,7 @@ articleIdRouter
       res.status(405).send({ msg: "Invalid method" });
     })
   );
+
+articleIdRouter.use("/comments", articleCommentsRouter);
 
 module.exports = { articleIdRouter };

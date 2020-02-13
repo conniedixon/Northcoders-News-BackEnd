@@ -135,7 +135,7 @@ describe("APP/API:", () => {
         describe("GET", () => {
           it.only("Status 200: returns an array of topics", () => {
             return request(app)
-              .get("/api/articles/:article_id/comments")
+              .get("/api/articles/1/comments")
               .expect(200)
               .then(({ body: { article } }) => {
                 expect(article).to.be.an("array");
