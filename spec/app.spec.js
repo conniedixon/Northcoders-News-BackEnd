@@ -118,7 +118,7 @@ describe("APP/API:", () => {
               expect(msg).to.eql("No article found for id 10697");
             });
         });
-        it.only("Status 405: Invalid Method", () => {
+        it("Status 405: Invalid Method", () => {
           const invalidMethods = ["post", "put", "delete"];
           const methodPromises = invalidMethods.map(method => {
             return request(app)
@@ -129,6 +129,33 @@ describe("APP/API:", () => {
               });
           });
           return Promise.all(methodPromises);
+        });
+      });
+      describe("/comments", () => {
+        describe("GET", () => {
+          it.only("Status 200: returns an array of topics", () => {
+            return request(app)
+              .get("/api/articles/:article_id/comments")
+              .expect(200)
+              .then(({ body: { article } }) => {
+                expect(article).to.be.an("array");
+                expect(article[0]).to.contain.keys(
+                  "comment_id",
+                  "votes",
+                  "created_at",
+                  "author",
+                  "body"
+                );
+              });
+          });
+          // it("Status 404: Path not found", () => {
+          //   return request(app)
+          //     .get("/api/topix")
+          //     .expect(404)
+          //     .then(({ body: { msg } }) => {
+          //       expect(msg).to.eql("Path not found");
+          //     });
+          // });
         });
       });
     });
