@@ -32,4 +32,27 @@ describe("APP/API:", () => {
       });
     });
   });
+  describe("/USERS", () => {
+    describe("/:username", () => {
+      describe("GET", () => {
+        it("Status 200: returns a user object with relevant keys", () => {
+          return request(app)
+            .get("/api/users/jessjelly")
+            .expect(200)
+            .then(({ body: { user } }) => {
+              expect(user[0]).to.be.an("object");
+              expect(user[0]).to.contain.keys("username", "avatar_url", "name");
+            });
+        });
+        it("Status 404: Custom message user {username} not found", () => {
+          return request(app)
+            .get("/api/users/jessyjellie")
+            .expect(404)
+            .then(({ body: { msg } }) => {
+              expect(msg).to.eql("No user found for username: jessyjellie");
+            });
+        });
+      });
+    });
+  });
 });
