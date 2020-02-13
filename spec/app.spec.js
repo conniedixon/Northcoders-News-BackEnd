@@ -55,4 +55,27 @@ describe("APP/API:", () => {
       });
     });
   });
+  describe("/ARTICLES", () => {
+    describe("/:article_id", () => {
+      describe("GET", () => {
+        it("Status 200: Returns an object with relevant keys", () => {
+          return request(app)
+            .get("/api/articles/1")
+            .expect(200)
+            .then(({ body: { article } }) => {
+              expect(article[0]).to.be.an("object");
+              expect(article[0]).to.contain.keys(
+                "author",
+                "title",
+                "article_id",
+                "body",
+                "topic",
+                "created_at",
+                "votes"
+              );
+            });
+        });
+      });
+    });
+  });
 });
