@@ -1,8 +1,14 @@
 const express = require("express");
 const articlesRouter = express.Router();
 
-const { getArticleById } = require("../controllers/articlesControllers.js");
+const {
+  getArticleById,
+  incrementArticleVotes
+} = require("../controllers/articlesControllers.js");
 
-articlesRouter.route("/:article_id").get(getArticleById);
+articlesRouter
+  .route("/:article_id")
+  .get(getArticleById)
+  .patch(incrementArticleVotes);
 
 module.exports = { articlesRouter };

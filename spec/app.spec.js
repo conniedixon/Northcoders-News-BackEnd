@@ -1,8 +1,13 @@
+process.env.NODE_ENV = "test";
+
 const { expect } = require("chai");
 const request = require("supertest");
 const { app } = require("../app");
+const connection = require("../db/connection");
 
 describe("APP/API:", () => {
+  beforeEach(() => connection.seed.run());
+  after(() => connection.destroy());
   it("Status 404: Path not found", () => {
     return request(app)
       .get("/invalid")
@@ -37,7 +42,7 @@ describe("APP/API:", () => {
       describe("GET", () => {
         it("Status 200: returns a user object with relevant keys", () => {
           return request(app)
-            .get("/api/users/jessjelly")
+            .get("/api/users/butter_bridge")
             .expect(200)
             .then(({ body: { user } }) => {
               expect(user[0]).to.be.an("object");
@@ -60,7 +65,7 @@ describe("APP/API:", () => {
       describe("GET", () => {
         it("Status 200: Returns an object with relevant keys", () => {
           return request(app)
-            .get("/api/articles/1")
+            .get("/api/articles/2")
             .expect(200)
             .then(({ body: { article } }) => {
               expect(article[0]).to.be.an("object");
@@ -81,7 +86,7 @@ describe("APP/API:", () => {
             .expect(200)
             .then(({ body: { article } }) => {
               expect(article[0]).to.contain.keys("comment_count");
-              expect(article[0].comment_count).to.eql("0");
+              expect(article[0].comment_count).to.eql("13");
             });
         });
         it("Status 404: Returns custom message no article found for id {id}", () => {
@@ -90,6 +95,18 @@ describe("APP/API:", () => {
             .expect(404)
             .then(({ body: { msg } }) => {
               expect(msg).to.eql("No article found for id 10697");
+            });
+        });
+      });
+      describe("PATCH", () => {
+        it("Status 200: Responds with an object with relevant values", () => {
+          return request(app)
+            .patch("/api/articles/3")
+            .send({ inc_votes: 1 })
+            .expect(200)
+            .then(({ body: { article } }) => {
+              console.log(article);
+              expect(article[0].votes).to.eql(1);
             });
         });
       });

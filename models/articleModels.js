@@ -20,6 +20,20 @@ const fetchArticleById = query => {
     });
 };
 
-module.exports = { fetchArticleById };
+const fetchArticleVotes = (query, body) => {
+  const { article_id } = query;
+  const { inc_votes } = body;
+  return knex("articles")
+    .select("*")
+    .where({ article_id })
+    .increment("votes", inc_votes)
+    .returning("*");
+  // .then(response => {
+  //   return reso
+  //   console.log(response, "<--- response");
+  // });
+};
+
+module.exports = { fetchArticleById, fetchArticleVotes };
 
 //SELECT articles.* COUNT(article_id) AS "comment_count" FROM "articles" WHERE ("article_id", "=", article_id)
