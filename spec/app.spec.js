@@ -99,7 +99,7 @@ describe("APP/API:", () => {
         });
       });
       describe("PATCH", () => {
-        it("Status 200: Responds with an object with relevant values", () => {
+        it("Status 200: Responds with an object with relevant values and increments ", () => {
           return request(app)
             .patch("/api/articles/3")
             .send({ inc_votes: 1 })
@@ -117,6 +117,18 @@ describe("APP/API:", () => {
             .then(({ body: { msg } }) => {
               expect(msg).to.eql("No article found for id 10697");
             });
+        });
+        it.only("Status 405: Invalid Method", () => {
+          const invalidMethods = ["post", "put", "delete"];
+          const methodPromises = invalidMethods.map(method => {
+            return request(app)
+              [method]("/api/articles/1")
+              .expect(405)
+              .then(({ body: { msg } }) => {
+                expect(msg).to.equal("Invalid method");
+              });
+          });
+          return Promise.all(methodPromises);
         });
       });
     });

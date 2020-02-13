@@ -40,5 +40,3 @@ const fetchArticleVotes = (query, body) => {
 };
 
 module.exports = { fetchArticleById, fetchArticleVotes };
-
-//SELECT articles.* COUNT(article_id) AS "comment_count" FROM "articles" WHERE ("article_id", "=", article_id)
