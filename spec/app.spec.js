@@ -109,6 +109,15 @@ describe("APP/API:", () => {
               expect(article[0].votes).to.eql(1);
             });
         });
+        it("Status 404: Custom message, path not found", () => {
+          return request(app)
+            .patch("/api/articles/10697")
+            .send({ inc_votes: 1 })
+            .expect(404)
+            .then(({ body: { msg } }) => {
+              expect(msg).to.eql("No article found for id 10697");
+            });
+        });
       });
     });
   });

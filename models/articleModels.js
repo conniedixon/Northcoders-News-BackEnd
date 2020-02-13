@@ -27,11 +27,16 @@ const fetchArticleVotes = (query, body) => {
     .select("*")
     .where({ article_id })
     .increment("votes", inc_votes)
-    .returning("*");
-  // .then(response => {
-  //   return reso
-  //   console.log(response, "<--- response");
-  // });
+    .returning("*")
+    .then(response => {
+      if (response.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: `No article found for id ${article_id}`
+        });
+      }
+      return response;
+    });
 };
 
 module.exports = { fetchArticleById, fetchArticleVotes };
