@@ -39,4 +39,13 @@ const fetchArticleVotes = (query, body) => {
     });
 };
 
-module.exports = { fetchArticleById, fetchArticleVotes };
+
+const fetchAllComments = query => {
+  const { article_id } = query;
+  console.log(article_id);
+  return knex("comments")
+    .select("*")
+    .where("articles.article_id", article_id);
+};
+
+module.exports = { fetchArticleById, fetchArticleVotes, fetchAllComments };
