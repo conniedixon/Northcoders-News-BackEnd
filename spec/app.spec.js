@@ -75,6 +75,23 @@ describe("APP/API:", () => {
               );
             });
         });
+        it("Status 200: Returns a comment count column", () => {
+          return request(app)
+            .get("/api/articles/1")
+            .expect(200)
+            .then(({ body: { article } }) => {
+              expect(article[0]).to.contain.keys("comment_count");
+              expect(article[0].comment_count).to.eql("0");
+            });
+        });
+        it("Status 404: Returns custom message no article found for id {id}", () => {
+          return request(app)
+            .get("/api/articles/10697")
+            .expect(404)
+            .then(({ body: { msg } }) => {
+              expect(msg).to.eql("No article found for id 10697");
+            });
+        });
       });
     });
   });
