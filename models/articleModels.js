@@ -55,7 +55,10 @@ const sendAComment = (query, comment) => {
       author: comment.username,
       article_id: article_id
     })
-    .returning("*");
+    .returning("*")
+    .then(([comment]) => {
+      return comment;
+    });
 };
 
 const fetchAllArticles = query => {

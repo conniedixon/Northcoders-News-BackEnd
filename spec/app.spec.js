@@ -251,7 +251,7 @@ describe("APP/API:", () => {
               });
           });
         });
-        describe.only("POST", () => {
+        describe("POST", () => {
           it("Status 201: Responds with created comment", () => {
             return request(app)
               .post("/api/articles/3/comments")
@@ -261,7 +261,8 @@ describe("APP/API:", () => {
               })
               .expect(201)
               .then(({ body: { postedComment } }) => {
-                expect(postedComment[0]).to.be.an("array");
+                console.log(postedComment);
+                expect(postedComment).to.be.an("object");
                 expect(postedComment.body).to.eql("I love posting comments");
               });
           });
@@ -314,7 +315,7 @@ describe("APP/API:", () => {
             .send({ inc_votes: 1 })
             .expect(200)
             .then(({ body: { comment } }) => {
-              expect(comment).to.be.an("object")
+              expect(comment).to.be.an("object");
               expect(comment.votes).to.eql(17);
             });
         });
