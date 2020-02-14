@@ -46,4 +46,13 @@ const fetchAllComments = query => {
     .where("comments.article_id", article_id);
 };
 
-module.exports = { fetchArticleById, fetchArticleVotes, fetchAllComments };
+const sendComment = (query, body) => {
+  const { article_id } = body;
+};
+
+module.exports = {
+  fetchArticleById,
+  fetchArticleVotes,
+  fetchAllComments,
+  sendComment
+};

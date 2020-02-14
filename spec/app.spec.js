@@ -105,7 +105,6 @@ describe("APP/API:", () => {
             .send({ inc_votes: 1 })
             .expect(200)
             .then(({ body: { article } }) => {
-              console.log(article);
               expect(article[0].votes).to.eql(1);
             });
         });
@@ -154,6 +153,20 @@ describe("APP/API:", () => {
               .expect(404)
               .then(({ body: { msg } }) => {
                 expect(msg).to.eql("Path not found");
+              });
+          });
+        });
+        describe("POST", () => {
+          it("Status 201: Responds with created comment", () => {
+            return request(app)
+              .post("/api/articles/3/comments")
+              .send({ connie: "I love posting comments" })
+              .expect(201)
+              .then(({ body: { comment } }) => {
+                expect(comment[0]).to.be.an("object");
+                expect(comment[0]).to.eql({
+                  connie: "I love posting comments"
+                });
               });
           });
         });

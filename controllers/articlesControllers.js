@@ -1,7 +1,8 @@
 const {
   fetchArticleById,
   fetchArticleVotes,
-  fetchAllComments
+  fetchAllComments,
+  sendComment
 } = require("../models/articleModels.js");
 
 const getArticleById = (req, res, next) => {
@@ -41,4 +42,24 @@ const getAllComments = (req, res, next) => {
     });
 };
 
-module.exports = { getArticleById, incrementArticleVotes, getAllComments };
+const postComment = (req, res, next) => {
+  const query = req.params;
+  const comment = req.body;
+  console.log(query, "<--- query", comment, "<--- comment");
+
+  sendComment(query, body)
+    .then(comment => {
+      res.status(200).send({ comment });
+    })
+    .catch(err => {
+      console.log(err);
+      next(err);
+    });
+};
+
+module.exports = {
+  getArticleById,
+  incrementArticleVotes,
+  getAllComments,
+  postComment
+};
