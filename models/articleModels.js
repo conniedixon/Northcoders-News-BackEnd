@@ -56,7 +56,7 @@ const sendAComment = (query, comment) => {
     .returning("*");
 };
 
-const fetchAllArticles = () => {
+const fetchAllArticles = query => {
   return knex
     .select("articles.*")
     .from("articles")

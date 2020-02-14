@@ -1,6 +1,8 @@
 process.env.NODE_ENV = "test";
 
-const { expect } = require("chai");
+const chai = require("chai");
+const chaiSorted = require("chai-sorted");
+const { expect } = chai.use(chaiSorted);
 const request = require("supertest");
 const { app } = require("../app");
 const connection = require("../db/connection");
@@ -87,13 +89,15 @@ describe("APP/API:", () => {
             expect(articles[0]).to.contain.keys("comment_count");
           });
       });
-      describe("QUERIES", () => {
-        xit("Accepts a sort_by query", () => {
+      describe.only("QUERIES", () => {
+        it("Accepts a sort_by query", () => {
           return request(app)
             .get("/api/articles?sort_by=article_id")
             .expect(200)
             .then(({ body: { articles } }) => {
-              expect(articles).to.be.sortedBy("article_id");
+              expect(articles).to.be.sortedBy("article_id", {
+                ascending: true
+              });
             });
         });
         xit("Accepts a descending and ascending order query", () => {
@@ -300,7 +304,7 @@ describe("APP/API:", () => {
       });
     });
   });
-  describe.only("/COMMENTS", () => {
+  describe("/COMMENTS", () => {
     describe("/comment:id", () => {
       describe("PATCH", () => {
         it("Status 200: Responds with an object with relevant values and increments ", () => {
