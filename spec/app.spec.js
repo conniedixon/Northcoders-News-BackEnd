@@ -97,6 +97,14 @@ describe("APP/API:", () => {
               expect(msg).to.eql("No article found for id 10697");
             });
         });
+        it("Status 400: Bad Request", () => {
+          return request(app)
+            .get("/api/articles/notAnArticle")
+            .expect(400)
+            .then(({ body: { msg } }) => {
+              expect(msg).to.eql("Bad Request");
+            });
+        });
       });
       describe("PATCH", () => {
         it("Status 200: Responds with an object with relevant values and increments ", () => {
@@ -129,6 +137,14 @@ describe("APP/API:", () => {
           });
           return Promise.all(methodPromises);
         });
+        it("Status 400: Bad Request", () => {
+          return request(app)
+            .patch("/api/articles/notAnArticle")
+            .expect(400)
+            .then(({ body: { msg } }) => {
+              expect(msg).to.eql("Bad Request");
+            });
+        });
       });
       describe("/comments", () => {
         describe("GET", () => {
@@ -155,8 +171,16 @@ describe("APP/API:", () => {
                 expect(msg).to.eql("Path not found");
               });
           });
+          it("Status 400: Bad Request", () => {
+            return request(app)
+              .post("/api/articles/notAnArticle/comments")
+              .expect(400)
+              .then(({ body: { msg } }) => {
+                expect(msg).to.eql("Bad Request");
+              });
+          });
         });
-        describe.only("POST", () => {
+        describe("POST", () => {
           it("Status 201: Responds with created comment", () => {
             return request(app)
               .post("/api/articles/3/comments")
@@ -193,6 +217,18 @@ describe("APP/API:", () => {
                 });
             });
             return Promise.all(methodPromises);
+          });
+          it("Status 404: Path not found", () => {
+            return request(app)
+              .post("/api/700000/comments")
+              .send({
+                username: "butter_bridge",
+                body: "I love posting comments!"
+              })
+              .expect(404)
+              .then(({ body: { msg } }) => {
+                expect(msg).to.eql("Path not found");
+              });
           });
         });
       });
