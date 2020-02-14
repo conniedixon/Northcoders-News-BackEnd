@@ -66,16 +66,16 @@ describe("APP/API:", () => {
         return request(app)
           .get("/api/articles")
           .expect(200)
-          .then(({ body: { topics } }) => {
-            expect(topics).to.be.an("array");
-            expect(topics[0]).to.contain.keys(
+          .then(({ body: { articles } }) => {
+            expect(articles).to.be.an("array");
+            expect(articles[0]).to.contain.keys(
               "author",
               "title",
+              "body",
               "article_id",
               "topic",
               "created_at",
               "votes",
-              "comment_count"
             );
           });
       });

@@ -5,8 +5,18 @@ const {
   getAllComments,
   postComment,
   getArticleById,
-  incrementArticleVotes
+  incrementArticleVotes,
+  getAllArticles
 } = require("../controllers/articlesControllers");
+
+articlesRouter
+  .route("/")
+  .get(getAllArticles)
+  .all(
+    (invalidMethod = (req, res, next) => {
+      res.status(405).send({ msg: "Invalid method" });
+    })
+  );
 
 articlesRouter
   .route("/:article_id")

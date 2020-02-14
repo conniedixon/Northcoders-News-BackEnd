@@ -56,9 +56,14 @@ const sendAComment = (query, comment) => {
     .returning("*");
 };
 
+const fetchAllArticles = () => {
+  return knex("articles").select("*");
+};
+
 module.exports = {
   fetchArticleById,
   fetchArticleVotes,
   fetchAllComments,
-  sendAComment
+  sendAComment,
+  fetchAllArticles
 };

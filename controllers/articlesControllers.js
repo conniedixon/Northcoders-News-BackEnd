@@ -2,7 +2,8 @@ const {
   fetchArticleById,
   fetchArticleVotes,
   fetchAllComments,
-  sendAComment
+  sendAComment,
+  fetchAllArticles
 } = require("../models/articleModels");
 
 const getArticleById = (req, res, next) => {
@@ -55,9 +56,21 @@ const postComment = (req, res, next) => {
     });
 };
 
+const getAllArticles = (req, res, next) => {
+  fetchAllArticles()
+    .then(articles => {
+      res.status(200).send({ articles });
+    })
+    .catch(err => {
+      console.log(err);
+      next(err);
+    });
+};
+
 module.exports = {
   getArticleById,
   incrementArticleVotes,
   getAllComments,
-  postComment
+  postComment,
+  getAllArticles
 };
