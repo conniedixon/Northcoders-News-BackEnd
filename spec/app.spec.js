@@ -4,7 +4,7 @@ const chai = require("chai");
 const chaiSorted = require("chai-sorted");
 const { expect } = chai.use(chaiSorted);
 const request = require("supertest");
-const { app } = require("../app");
+const  app  = require("../app");
 const connection = require("../db/connection");
 
 describe("APP/API:", () => {
