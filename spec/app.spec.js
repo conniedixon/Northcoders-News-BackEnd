@@ -61,7 +61,7 @@ describe("APP/API:", () => {
     });
   });
   describe("/ARTICLES", () => {
-    describe.only("GET", () => {
+    describe("GET", () => {
       it("Status 200: returns an array of articles", () => {
         return request(app)
           .get("/api/articles")
@@ -301,4 +301,36 @@ describe("APP/API:", () => {
       });
     });
   });
+  describe("/COMMENTS", () => {
+    describe("/comment:id", () => {
+      describe.only("PATCH", () => {
+        it("Status 200: Responds with an object with relevant values and increments ", () => {
+          return request(app)
+            .patch("/api/comments/1")
+            .send({ inc_votes: 1 })
+            .expect(200)
+            .then(({ body: { comment } }) => {
+              expect(comment[0].votes).to.eql(17);
+            });
+        });
+        it("Status 404: Custom message, path not found", () => {
+          return request(app)
+            .patch("/api/comments/10000000")
+            .send({ inc_votes: 1 })
+            .expect(404)
+            .then(({ body: { msg } }) => {
+              expect(msg).to.eql("No comments found for id 10000000");
+            });
+        });
+        it("Status 400: Bad Request", () => {
+          return request(app)
+            .patch("/api/comments/notAnArticle")
+            .expect(400)
+            .then(({ body: { msg } }) => {
+              expect(msg).to.eql("Bad Request");
+            });
+        });
+      })
+    })
+  })
 });
