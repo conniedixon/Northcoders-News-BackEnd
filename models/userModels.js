@@ -3,10 +3,10 @@ const knex = require("../db/connection");
 const fetchUser = query => {
   const { username } = query;
   return knex("users")
-    .select("*")
+    .first("*")
     .where({ username })
     .then(user => {
-      if (user.length === 0) {
+      if (!user) {
         return Promise.reject({
           status: 404,
           msg: `No user found for username: ${username}`

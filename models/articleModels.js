@@ -3,14 +3,14 @@ const knex = require("../db/connection");
 const fetchArticleById = query => {
   const { article_id } = query;
   return knex
-    .select("articles.*")
+    .first("articles.*")
     .from("articles")
     .where("articles.article_id", article_id)
     .count("comments.comment_id AS comment_count")
     .leftJoin("comments", "articles.article_id", "comments.article_id")
     .groupBy("articles.article_id")
     .then(article => {
-      if (article.length === 0) {
+      if (!article) {
         return Promise.reject({
           status: 404,
           msg: `No article found for id ${article_id}`
@@ -35,7 +35,7 @@ const fetchArticleVotes = (query, body) => {
           msg: `No article found for id ${article_id}`
         });
       }
-      return response;
+      return response[0];
     });
 };
 
@@ -50,20 +50,25 @@ const sendAComment = (query, comment) => {
   const { article_id } = query;
   return knex("comments")
     .where({ article_id })
-    .insert([
-      { body: comment.body, author: comment.username, article_id: article_id }
-    ])
+    .insert({
+      body: comment.body,
+      author: comment.username,
+      article_id: article_id
+    })
     .returning("*");
 };
 
 const fetchAllArticles = query => {
+  console.log(query);
   return knex
     .select("articles.*")
     .from("articles")
     .count("comments.comment_id AS comment_count")
     .leftJoin("comments", "articles.article_id", "comments.article_id")
-    .groupBy("articles.article_id")
-    .returning("*");
+    .groupBy("articles.article_id");
+  // .modify(query => {
+  //   if (sort_by) query.where({});
+  // });
 };
 
 module.exports = {

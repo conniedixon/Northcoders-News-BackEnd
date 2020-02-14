@@ -47,8 +47,9 @@ describe("APP/API:", () => {
             .get("/api/users/butter_bridge")
             .expect(200)
             .then(({ body: { user } }) => {
-              expect(user[0]).to.be.an("object");
-              expect(user[0]).to.contain.keys("username", "avatar_url", "name");
+              console.log(user);
+              expect(user).to.be.an("object");
+              expect(user).to.contain.keys("username", "avatar_url", "name");
             });
         });
         it("Status 404: Custom message user {username} not found", () => {
@@ -89,8 +90,8 @@ describe("APP/API:", () => {
             expect(articles[0]).to.contain.keys("comment_count");
           });
       });
-      describe.only("QUERIES", () => {
-        it("Accepts a sort_by query", () => {
+      describe("QUERIES", () => {
+        xit("Accepts a sort_by query", () => {
           return request(app)
             .get("/api/articles?sort_by=article_id")
             .expect(200)
@@ -138,8 +139,8 @@ describe("APP/API:", () => {
             .get("/api/articles/2")
             .expect(200)
             .then(({ body: { article } }) => {
-              expect(article[0]).to.be.an("object");
-              expect(article[0]).to.contain.keys(
+              expect(article).to.be.an("object");
+              expect(article).to.contain.keys(
                 "author",
                 "title",
                 "article_id",
@@ -155,8 +156,8 @@ describe("APP/API:", () => {
             .get("/api/articles/1")
             .expect(200)
             .then(({ body: { article } }) => {
-              expect(article[0]).to.contain.keys("comment_count");
-              expect(article[0].comment_count).to.eql("13");
+              expect(article).to.contain.keys("comment_count");
+              expect(article.comment_count).to.eql("13");
             });
         });
         it("Status 404: Returns custom message no article found for id {id}", () => {
@@ -183,7 +184,7 @@ describe("APP/API:", () => {
             .send({ inc_votes: 1 })
             .expect(200)
             .then(({ body: { article } }) => {
-              expect(article[0].votes).to.eql(1);
+              expect(article.votes).to.eql(1);
             });
         });
         it("Status 404: Custom message, path not found", () => {
@@ -250,7 +251,7 @@ describe("APP/API:", () => {
               });
           });
         });
-        describe("POST", () => {
+        describe.only("POST", () => {
           it("Status 201: Responds with created comment", () => {
             return request(app)
               .post("/api/articles/3/comments")
@@ -260,8 +261,8 @@ describe("APP/API:", () => {
               })
               .expect(201)
               .then(({ body: { postedComment } }) => {
-                expect(postedComment[0]).to.be.an("object");
-                expect(postedComment[0].body).to.eql("I love posting comments");
+                expect(postedComment[0]).to.be.an("array");
+                expect(postedComment.body).to.eql("I love posting comments");
               });
           });
           it("Status 400: Bad Request", () => {
@@ -313,7 +314,8 @@ describe("APP/API:", () => {
             .send({ inc_votes: 1 })
             .expect(200)
             .then(({ body: { comment } }) => {
-              expect(comment[0].votes).to.eql(17);
+              expect(comment).to.be.an("object")
+              expect(comment.votes).to.eql(17);
             });
         });
         it("Status 404: Custom message, path not found", () => {

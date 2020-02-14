@@ -58,7 +58,7 @@ const postComment = (req, res, next) => {
 
 const getAllArticles = (req, res, next) => {
   const query = req.query;
-  console.log(query, "<--- query");
+  console.log(query, "<---query");
   fetchAllArticles(query)
     .then(articles => {
       res.status(200).send({ articles });

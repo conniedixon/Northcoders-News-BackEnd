@@ -15,7 +15,7 @@ const fetchVotes = (params, body) => {
           msg: `No comments found for id ${comment_id}`
         });
       }
-      return response;
+      return response[0];
     });
 };
 
