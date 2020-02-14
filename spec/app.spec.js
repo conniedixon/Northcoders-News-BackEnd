@@ -87,6 +87,38 @@ describe("APP/API:", () => {
             expect(articles[0]).to.contain.keys("comment_count");
           });
       });
+      describe("QUERIES", () => {
+        xit("Accepts a sort_by query", () => {
+          return request(app)
+          .get("/api/articles?sort_by=article_id")
+          .expect(200)
+          .then(({ body: { articles } }) => {
+            expect(articles).to.be.sortedBy('article_id')
+          })
+        })
+        xit("Accepts a descending and ascending order query", () => {
+          return request(app)
+          .get("/api/articles?order=desc")
+          .expect(200)
+          .then(({ body: { articles } }) => {
+            expect(articles).to.be.sortedBy(descending = true)
+          })
+        })
+        xit("Accepts a descending and ascending order query", () => {
+          return request(app)
+          .get("/api/articles?order=desc")
+          .expect(200)
+          .then(({ body: { articles } }) => {
+            expect(articles).to.be.sortedBy(descending = true)
+          })
+        })
+
+// - `sort_by`, which sorts the articles by any valid column (defaults to date)
+// - `order`, which can be set to `asc` or `desc` for ascending or descending (defaults to descending)
+// - `author`, which filters the articles by the username value specified in the query
+// - `topic`, which filters the articles by the topic value specified in the query
+      
+      })
       it("Status 404: Path not found", () => {
         return request(app)
           .get("/api/arcicles")
