@@ -130,7 +130,7 @@ describe("APP/API:", () => {
           return Promise.all(methodPromises);
         });
       });
-      describe.only("/comments", () => {
+      describe("/comments", () => {
         describe("GET", () => {
           it("Status 200: returns an array of comments", () => {
             return request(app)

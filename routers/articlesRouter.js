@@ -1,17 +1,31 @@
 const express = require("express");
 const articlesRouter = express.Router();
 
-const { articleIdRouter } = require("./articleIdRouter");
 const {
   getAllComments,
-  postComment
+  postComment,
+  getArticleById,
+  incrementArticleVotes
 } = require("../controllers/articlesControllers");
 
-articlesRouter.use("/:article_id", articleIdRouter);
+articlesRouter
+  .route("/:article_id")
+  .get(getArticleById)
+  .patch(incrementArticleVotes)
+  .all(
+    (invalidMethod = (req, res, next) => {
+      res.status(405).send({ msg: "Invalid method" });
+    })
+  );
 
 articlesRouter
   .route("/:article_id/comments")
   .get(getAllComments)
-  .post(postComment);
+  .post(postComment)
+  .all(
+    (invalidMethod = (req, res, next) => {
+      res.status(405).send({ msg: "Invalid method" });
+    })
+  );
 
 module.exports = { articlesRouter };

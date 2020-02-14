@@ -1,4 +1,4 @@
-const knex = require("../db/connection.js");
+const knex = require("../db/connection");
 
 const fetchArticleById = query => {
   const { article_id } = query;
@@ -46,13 +46,13 @@ const fetchAllComments = query => {
     .where("comments.article_id", article_id);
 };
 
-const sendComment = (query, body) => {
-  const { article_id } = body;
+const sendAComment = () => {
+  console.log("Made it!");
 };
 
 module.exports = {
   fetchArticleById,
   fetchArticleVotes,
   fetchAllComments,
-  sendComment
+  sendAComment
 };

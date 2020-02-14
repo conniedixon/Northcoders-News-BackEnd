@@ -3,7 +3,7 @@ const {
   fetchArticleVotes,
   fetchAllComments,
   sendComment
-} = require("../models/articleModels.js");
+} = require("../models/articleModels");
 
 const getArticleById = (req, res, next) => {
   const query = req.params;
@@ -46,10 +46,11 @@ const postComment = (req, res, next) => {
   const query = req.params;
   const comment = req.body;
   console.log(query, "<--- query", comment, "<--- comment");
-
-  sendComment(query, body)
-    .then(comment => {
-      res.status(200).send({ comment });
+  // sendAComment(query, comment)
+  sendAComment()
+    .then(postedComment => {
+      console.log("Am I here?");
+      res.status(201).send({ postedComment });
     })
     .catch(err => {
       console.log(err);
