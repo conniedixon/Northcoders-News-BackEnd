@@ -57,7 +57,13 @@ const sendAComment = (query, comment) => {
 };
 
 const fetchAllArticles = () => {
-  return knex("articles").select("*");
+  return knex
+    .select("articles.*")
+    .from("articles")
+    .count("comments.comment_id AS comment_count")
+    .leftJoin("comments", "articles.article_id", "comments.article_id")
+    .groupBy("articles.article_id")
+    .returning("*");
 };
 
 module.exports = {

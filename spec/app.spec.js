@@ -75,8 +75,16 @@ describe("APP/API:", () => {
               "article_id",
               "topic",
               "created_at",
-              "votes",
+              "votes"
             );
+          });
+      });
+      it("Status 200: returns a comment count for each article", () => {
+        return request(app)
+          .get("/api/articles")
+          .expect(200)
+          .then(({ body: { articles } }) => {
+            expect(articles[0]).to.contain.keys("comment_count");
           });
       });
       it("Status 404: Path not found", () => {
