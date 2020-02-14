@@ -131,9 +131,9 @@ describe("APP/API:", () => {
           return Promise.all(methodPromises);
         });
       });
-      describe("/comments", () => {
+      describe.only("/comments", () => {
         describe("GET", () => {
-          it.only("Status 200: returns an array of comments", () => {
+          it("Status 200: returns an array of comments", () => {
             return request(app)
               .get("/api/articles/1/comments")
               .expect(200)
@@ -148,14 +148,14 @@ describe("APP/API:", () => {
                 );
               });
           });
-          // it("Status 404: Path not found", () => {
-          //   return request(app)
-          //     .get("/api/topix")
-          //     .expect(404)
-          //     .then(({ body: { msg } }) => {
-          //       expect(msg).to.eql("Path not found");
-          //     });
-          // });
+          it("Status 404: Path not found", () => {
+            return request(app)
+              .get("/api/700000/comments")
+              .expect(404)
+              .then(({ body: { msg } }) => {
+                expect(msg).to.eql("Path not found");
+              });
+          });
         });
       });
     });
