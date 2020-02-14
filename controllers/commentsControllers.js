@@ -1,9 +1,8 @@
-const { fetchVotes } = require("../models/commentsModels");
+const { fetchVotes, fetchDeleteComment } = require("../models/commentsModels");
 
 const incrementVotes = (req, res, next) => {
   const params = req.params;
   const body = req.body;
-  console.log(params, body, "<---params and body");
   fetchVotes(params, body)
     .then(comment => {
       res.status(200).send({ comment });
@@ -14,4 +13,16 @@ const incrementVotes = (req, res, next) => {
     });
 };
 
-module.exports = { incrementVotes };
+const deleteComment = (req, res, next) => {
+  const params = req.params;
+  fetchDeleteComment(params)
+    .then(status => {
+      res.sendStatus(204);
+    })
+    .catch(err => {
+      console.log(err);
+      next(err);
+    });
+};
+
+module.exports = { incrementVotes, deleteComment };

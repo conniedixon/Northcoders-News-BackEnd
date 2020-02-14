@@ -19,4 +19,11 @@ const fetchVotes = (params, body) => {
     });
 };
 
-module.exports = { fetchVotes };
+const fetchDeleteComment = params => {
+  const { comment_id } = params;
+  return knex("comments")
+    .where({ comment_id })
+    .del();
+};
+
+module.exports = { fetchVotes, fetchDeleteComment };
