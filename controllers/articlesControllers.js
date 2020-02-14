@@ -30,8 +30,7 @@ const incrementArticleVotes = (req, res, next) => {
 };
 
 const getAllComments = (req, res, next) => {
-  console.log(req);
-  const query = req.query;
+  const query = req.params;
   fetchAllComments(query)
     .then(comments => {
       res.status(200).send({ comments });

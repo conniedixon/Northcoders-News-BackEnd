@@ -133,13 +133,13 @@ describe("APP/API:", () => {
       });
       describe("/comments", () => {
         describe("GET", () => {
-          it.only("Status 200: returns an array of topics", () => {
+          it.only("Status 200: returns an array of comments", () => {
             return request(app)
               .get("/api/articles/1/comments")
               .expect(200)
-              .then(({ body: { article } }) => {
-                expect(article).to.be.an("array");
-                expect(article[0]).to.contain.keys(
+              .then(({ body: { comments } }) => {
+                expect(comments).to.be.an("array");
+                expect(comments[0]).to.contain.keys(
                   "comment_id",
                   "votes",
                   "created_at",
