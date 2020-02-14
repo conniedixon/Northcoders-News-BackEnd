@@ -2,7 +2,7 @@ const {
   fetchArticleById,
   fetchArticleVotes,
   fetchAllComments,
-  sendComment
+  sendAComment
 } = require("../models/articleModels");
 
 const getArticleById = (req, res, next) => {
@@ -45,11 +45,8 @@ const getAllComments = (req, res, next) => {
 const postComment = (req, res, next) => {
   const query = req.params;
   const comment = req.body;
-  console.log(query, "<--- query", comment, "<--- comment");
-  // sendAComment(query, comment)
-  sendAComment()
+  sendAComment(query, comment)
     .then(postedComment => {
-      console.log("Am I here?");
       res.status(201).send({ postedComment });
     })
     .catch(err => {

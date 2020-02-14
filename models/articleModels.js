@@ -46,8 +46,14 @@ const fetchAllComments = query => {
     .where("comments.article_id", article_id);
 };
 
-const sendAComment = () => {
-  console.log("Made it!");
+const sendAComment = (query, comment) => {
+  const { article_id } = query;
+  return knex("comments")
+    .where({ article_id })
+    .insert([
+      { body: comment.body, author: comment.username, article_id: article_id }
+    ])
+    .returning("*");
 };
 
 module.exports = {

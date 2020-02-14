@@ -156,17 +156,18 @@ describe("APP/API:", () => {
               });
           });
         });
-        describe("POST", () => {
+        describe.only("POST", () => {
           it("Status 201: Responds with created comment", () => {
             return request(app)
               .post("/api/articles/3/comments")
-              .send({ connie: "I love posting comments" })
+              .send({
+                username: "butter_bridge",
+                body: "I love posting comments"
+              })
               .expect(201)
-              .then(({ body: { comment } }) => {
-                expect(comment[0]).to.be.an("object");
-                expect(comment[0]).to.eql({
-                  connie: "I love posting comments"
-                });
+              .then(({ body: { postedComment } }) => {
+                expect(postedComment[0]).to.be.an("object");
+                expect(postedComment[0].body).to.eql("I love posting comments");
               });
           });
         });
