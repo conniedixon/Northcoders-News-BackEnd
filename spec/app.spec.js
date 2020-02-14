@@ -170,6 +170,30 @@ describe("APP/API:", () => {
                 expect(postedComment[0].body).to.eql("I love posting comments");
               });
           });
+          it("Status 400: Bad Request", () => {
+            return request(app)
+              .post("/api/articles/notAnArticle/comments")
+              .send({
+                username: "butter_bridge",
+                body: "I love posting comments"
+              })
+              .expect(400)
+              .then(({ body: { msg } }) => {
+                expect(msg).to.eql("Bad Request");
+              });
+          });
+          it("Status 405: Invalid Method", () => {
+            const invalidMethods = ["put", "delete"];
+            const methodPromises = invalidMethods.map(method => {
+              return request(app)
+                [method]("/api/articles/1/comments")
+                .expect(405)
+                .then(({ body: { msg } }) => {
+                  expect(msg).to.equal("Invalid method");
+                });
+            });
+            return Promise.all(methodPromises);
+          });
         });
       });
     });
