@@ -4,7 +4,7 @@ const chai = require("chai");
 const chaiSorted = require("chai-sorted");
 const { expect } = chai.use(chaiSorted);
 const request = require("supertest");
-const  app  = require("../app");
+const app = require("../app");
 const connection = require("../db/connection");
 
 describe("APP/API:", () => {
@@ -90,33 +90,46 @@ describe("APP/API:", () => {
             expect(articles[0]).to.contain.keys("comment_count");
           });
       });
-      describe("QUERIES", () => {
-        xit("Accepts a sort_by query", () => {
-          return request(app)
-            .get("/api/articles?sort_by=article_id")
-            .expect(200)
-            .then(({ body: { articles } }) => {
-              expect(articles).to.be.sortedBy("article_id", {
-                ascending: true
+      describe.only("QUERIES", () => {
+        describe("SORT_BY", () => {
+          it("Status 200: returns an array of articles sorted by a default of date", () => {
+            return request(app)
+              .get("/api/articles?sort_by=author")
+              .expect(200)
+              .then(({ body: { articles } }) => {
+                expect(articles).to.be.sortedBy("author", {
+                  descending: true
+                });
               });
+          });
+          describe("ORDER", () => {
+            it("Status 200: returns an array of articles ordered with a default of descending", () => {
+              return request(app)
+                .get("/api/articles?order=asc")
+                .expect(200)
+                .then(({ body: { articles } }) => {
+                  expect(articles).to.be.sorted({ descending: false });
+                });
             });
+          });
         });
-        xit("Accepts a descending and ascending order query", () => {
-          return request(app)
-            .get("/api/articles?order=desc")
-            .expect(200)
-            .then(({ body: { articles } }) => {
-              expect(articles).to.be.sortedBy((descending = true));
-            });
-        });
-        xit("Accepts a descending and ascending order query", () => {
-          return request(app)
-            .get("/api/articles?order=desc")
-            .expect(200)
-            .then(({ body: { articles } }) => {
-              expect(articles).to.be.sortedBy((descending = true));
-            });
-        });
+
+        // xit("Accepts a descending and ascending order query", () => {
+        //   return request(app)
+        //     .get("/api/articles?order=desc")
+        //     .expect(200)
+        //     .then(({ body: { articles } }) => {
+        //       expect(articles).to.be.sortedBy((descending = true));
+        //     });
+        // });
+        // xit("Accepts a descending and ascending order query", () => {
+        //   return request(app)
+        //     .get("/api/articles?order=desc")
+        //     .expect(200)
+        //     .then(({ body: { articles } }) => {
+        //       expect(articles).to.be.sortedBy((descending = true));
+        //     });
+        // });
 
         // - `sort_by`, which sorts the articles by any valid column (defaults to date)
         // - `order`, which can be set to `asc` or `desc` for ascending or descending (defaults to descending)
@@ -261,7 +274,6 @@ describe("APP/API:", () => {
               })
               .expect(201)
               .then(({ body: { postedComment } }) => {
-                console.log(postedComment);
                 expect(postedComment).to.be.an("object");
                 expect(postedComment.body).to.eql("I love posting comments");
               });

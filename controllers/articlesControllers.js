@@ -7,8 +7,8 @@ const {
 } = require("../models/articleModels");
 
 const getArticleById = (req, res, next) => {
-  const query = req.params;
-  fetchArticleById(query)
+  const params = req.params;
+  fetchArticleById(params)
     .then(article => {
       res.status(200).send({ article });
     })
