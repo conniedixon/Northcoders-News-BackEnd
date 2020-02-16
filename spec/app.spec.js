@@ -64,7 +64,7 @@ describe("APP/API:", () => {
     });
   });
   describe("/ARTICLES", () => {
-    describe.only("GET", () => {
+    describe("GET", () => {
       it("Status 200: returns an array of articles", () => {
         return request(app)
           .get("/api/articles")
@@ -220,8 +220,7 @@ describe("APP/API:", () => {
                   expect(msg).to.eql("Bad request");
                 });
             });
-            
-          })
+          });
         });
       });
       it("Status 404: Path not found", () => {
@@ -337,7 +336,7 @@ describe("APP/API:", () => {
           });
           it("Status 404: Path not found", () => {
             return request(app)
-              .get("/api/700000/comments")
+              .get("/api/articles/700000/comments")
               .expect(404)
               .then(({ body: { msg } }) => {
                 expect(msg).to.eql("Path not found");
@@ -442,6 +441,14 @@ describe("APP/API:", () => {
           return request(app)
             .delete("/api/comments/1")
             .expect(204);
+        });
+        it("Status 404: Path not found", () => {
+          return request(app)
+            .delete("/api/commments/1")
+            .expect(404)
+            .then(({ body: { msg } }) => {
+              expect(msg).to.eql("Path not found");
+            });
         });
       });
     });
