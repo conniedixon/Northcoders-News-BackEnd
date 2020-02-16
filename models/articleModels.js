@@ -77,6 +77,12 @@ const fetchAllArticles = ({
     .modify(query => {
       if (topic) query.where({ "articles.topic": topic });
       if (author) query.where({ "articles.author": author });
+    })
+    .then(articles => {
+      if (!articles) {
+        Promise.reject({ status: 404, msg: "Page not found" });
+      }
+      return articles;
     });
 };
 
