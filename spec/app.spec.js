@@ -112,29 +112,48 @@ describe("APP/API:", () => {
                 });
             });
           });
+          describe("FILTERS", () => {
+            it("when given an author, returns an array of articles filtering articles by username value specified in query", () => {
+              return request(app)
+                .get("/api/articles?author=rogersop")
+                .expect(200)
+                .then(({ body: { articles } }) => {
+                  expect(articles).to.be.an("array");
+                  expect(articles).to.have.length(3);
+                });
+            });
+            it("when given an author with no articles, returns an empty array", () => {
+              return request(app)
+                .get("/api/articles?author=lurker")
+                .expect(200)
+                .then(({ body: { articles } }) => {
+                  expect(articles).to.be.an("array");
+                  expect(articles).to.have.length(0);
+                  expect(articles).to.eql([]);
+                });
+            });
+            it("when given a topic, returns an array of articles filtered by topic value specified in the query", () => {
+              return request(app)
+                .get("/api/articles?topic=cats")
+                .expect(200)
+                .then(({ body: { articles } }) => {
+                  expect(articles).to.eql([
+                    {
+                      article_id: 5,
+                      author: "rogersop",
+                      body:
+                        "Bastet walks amongst us, and the cats are taking arms!",
+                      comment_count: "2",
+                      created_at: "2002-11-19T12:21:54.000Z",
+                      title: "UNCOVERED: catspiracy to bring down democracy",
+                      topic: "cats",
+                      votes: 0
+                    }
+                  ]);
+                });
+            });
+          });
         });
-
-        // xit("Accepts a descending and ascending order query", () => {
-        //   return request(app)
-        //     .get("/api/articles?order=desc")
-        //     .expect(200)
-        //     .then(({ body: { articles } }) => {
-        //       expect(articles).to.be.sortedBy((descending = true));
-        //     });
-        // });
-        // xit("Accepts a descending and ascending order query", () => {
-        //   return request(app)
-        //     .get("/api/articles?order=desc")
-        //     .expect(200)
-        //     .then(({ body: { articles } }) => {
-        //       expect(articles).to.be.sortedBy((descending = true));
-        //     });
-        // });
-
-        // - `sort_by`, which sorts the articles by any valid column (defaults to date)
-        // - `order`, which can be set to `asc` or `desc` for ascending or descending (defaults to descending)
-        // - `author`, which filters the articles by the username value specified in the query
-        // - `topic`, which filters the articles by the topic value specified in the query
       });
       it("Status 404: Path not found", () => {
         return request(app)

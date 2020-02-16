@@ -64,7 +64,12 @@ const sendAComment = (query, comment) => {
     });
 };
 
-const fetchAllArticles = ({ order = "desc", sort_by = "created_at" }) => {
+const fetchAllArticles = ({
+  order = "desc",
+  sort_by = "created_at",
+  author,
+  topic
+}) => {
   return knex
     .select("articles.*")
     .from("articles")
@@ -72,14 +77,9 @@ const fetchAllArticles = ({ order = "desc", sort_by = "created_at" }) => {
     .leftJoin("comments", "articles.article_id", "comments.article_id")
     .groupBy("articles.article_id")
     .orderBy(sort_by, order)
-    .then(response => {
-      if (response.length === 0) {
-        return Promise.reject({
-          status: 400,
-          msg: `Column ${sort_by} does not exist`
-        });
-      }
-      return response;
+    .modify(query => {
+      if (topic) query.where({ "articles.topic": topic });
+      if (author) query.where({ "articles.author": author });
     });
 };
 
