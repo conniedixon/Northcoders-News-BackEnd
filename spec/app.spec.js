@@ -118,56 +118,89 @@ describe("APP/API:", () => {
                 expect(msg).to.eql("Path not found");
               });
           });
-          describe("ORDER", () => {
-            it("Status 200: returns an array of articles ordered with a default of descending", () => {
-              return request(app)
-                .get("/api/articles?order=asc")
-                .expect(200)
-                .then(({ body: { articles } }) => {
-                  expect(articles).to.be.sorted({ descending: false });
-                });
-            });
+          it("Status 405: Bad Request", () => {
+            request(app)
+              .get("/api/articles?smort_smy=author")
+              .expect(405)
+              .then(({ body: { msg } }) => {
+                expect(msg).to.eql("Bad request");
+              });
           });
-          describe("FILTERS", () => {
-            it("when given an author, returns an array of articles filtering articles by username value specified in query", () => {
-              return request(app)
-                .get("/api/articles?author=rogersop")
-                .expect(200)
-                .then(({ body: { articles } }) => {
-                  expect(articles).to.be.an("array");
-                  expect(articles).to.have.length(3);
-                });
-            });
-            it("when given an author with no articles, returns an empty array", () => {
-              return request(app)
-                .get("/api/articles?author=lurker")
-                .expect(200)
-                .then(({ body: { articles } }) => {
-                  expect(articles).to.be.an("array");
-                  expect(articles).to.have.length(0);
-                  expect(articles).to.eql([]);
-                });
-            });
-            it("when given a topic, returns an array of articles filtered by topic value specified in the query", () => {
-              return request(app)
-                .get("/api/articles?topic=cats")
-                .expect(200)
-                .then(({ body: { articles } }) => {
-                  expect(articles).to.eql([
-                    {
-                      article_id: 5,
-                      author: "rogersop",
-                      body:
-                        "Bastet walks amongst us, and the cats are taking arms!",
-                      comment_count: "2",
-                      created_at: "2002-11-19T12:21:54.000Z",
-                      title: "UNCOVERED: catspiracy to bring down democracy",
-                      topic: "cats",
-                      votes: 0
-                    }
-                  ]);
-                });
-            });
+        });
+        describe("ORDER", () => {
+          it("Status 200: returns an array of articles ordered with a default of descending", () => {
+            return request(app)
+              .get("/api/articles?order=asc")
+              .expect(200)
+              .then(({ body: { articles } }) => {
+                expect(articles).to.be.sorted({ descending: false });
+              });
+          });
+          it("Status 405: Bad Request", () => {
+            request(app)
+              .get("/api/articles?orduh=asc")
+              .expect(405)
+              .then(({ body: { msg } }) => {
+                expect(msg).to.eql("Bad request");
+              });
+          });
+        });
+        describe("FILTERS", () => {
+          describe("author", () => {});
+          it("when given an author, returns an array of articles filtering articles by username value specified in query", () => {
+            return request(app)
+              .get("/api/articles?author=rogersop")
+              .expect(200)
+              .then(({ body: { articles } }) => {
+                expect(articles).to.be.an("array");
+                expect(articles).to.have.length(3);
+              });
+          });
+          it("Status 404: user does not exist", () => {
+            request(app)
+              .get("api/articles?author=supercooldude90")
+              .expect(404)
+              .then(({ body: { msg } }) => {
+                expect(msg).to.eql("Page not found");
+              });
+          });
+          it("Status 405: Bad request", () => {
+            request(app)
+              .get("/api/articles?authooor=butter_bridge")
+              .expect(405)
+              .then(({ body: { msg } }) => {
+                expect(msg).to.eql("Bad request");
+              });
+          });
+          it("when given an author with no articles, returns an empty array", () => {
+            return request(app)
+              .get("/api/articles?author=lurker")
+              .expect(200)
+              .then(({ body: { articles } }) => {
+                expect(articles).to.be.an("array");
+                expect(articles).to.have.length(0);
+                expect(articles).to.eql([]);
+              });
+          });
+          it("when given a topic, returns an array of articles filtered by topic value specified in the query", () => {
+            return request(app)
+              .get("/api/articles?topic=cats")
+              .expect(200)
+              .then(({ body: { articles } }) => {
+                expect(articles).to.eql([
+                  {
+                    article_id: 5,
+                    author: "rogersop",
+                    body:
+                      "Bastet walks amongst us, and the cats are taking arms!",
+                    comment_count: "2",
+                    created_at: "2002-11-19T12:21:54.000Z",
+                    title: "UNCOVERED: catspiracy to bring down democracy",
+                    topic: "cats",
+                    votes: 0
+                  }
+                ]);
+              });
           });
         });
       });
