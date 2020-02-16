@@ -64,7 +64,7 @@ describe("APP/API:", () => {
     });
   });
   describe("/ARTICLES", () => {
-    describe("GET", () => {
+    describe.only("GET", () => {
       it("Status 200: returns an array of articles", () => {
         return request(app)
           .get("/api/articles")
@@ -90,7 +90,15 @@ describe("APP/API:", () => {
             expect(articles[0]).to.contain.keys("comment_count");
           });
       });
-      describe.only("QUERIES", () => {
+      it("Status 404: Path not found", () => {
+        return request(app)
+          .get("/api/artlicicles")
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.eql("Path not found");
+          });
+      });
+      describe("QUERIES", () => {
         describe("SORT_BY", () => {
           it("Status 200: returns an array of articles sorted by a default of date", () => {
             return request(app)
@@ -100,6 +108,14 @@ describe("APP/API:", () => {
                 expect(articles).to.be.sortedBy("author", {
                   descending: true
                 });
+              });
+          });
+          it("Status 404: Column not found", () => {
+            request(app)
+              .get("/api/articles?sort_by=coolestarticle")
+              .expect(404)
+              .then(({ body: { msg } }) => {
+                expect(msg).to.eql("Path not found");
               });
           });
           describe("ORDER", () => {
