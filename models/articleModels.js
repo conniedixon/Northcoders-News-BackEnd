@@ -44,6 +44,12 @@ const fetchAllComments = query => {
   return knex("comments")
     .select("*")
     .where("comments.article_id", article_id);
+  // .then(comments => {
+  //   if (comments.length === 0) {
+  //     Promise.reject({ status: 404, msg: "Path not found" });
+  //   }
+  //   return comments;
+  // });
 };
 
 const sendAComment = (query, comment) => {
