@@ -334,7 +334,7 @@ describe("APP/API:", () => {
                 );
               });
           });
-          xit("Status 404: Path not found", () => {
+          it("Status 404: Path not found", () => {
             return request(app)
               .get("/api/articles/700000/comments")
               .expect(404)

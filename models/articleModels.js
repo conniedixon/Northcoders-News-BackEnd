@@ -20,9 +20,7 @@ const fetchArticleById = params => {
     });
 };
 
-const fetchArticleVotes = (query, body) => {
-  const { article_id } = query;
-  const { inc_votes } = body;
+const fetchArticleVotes = ({article_id, inc_votes = 0}, body) => {
   return knex("articles")
     .select("*")
     .where({ article_id })
@@ -48,6 +46,7 @@ const fetchAllComments = (query,  { sort_by = "created_at", order = "desc" }) =>
 
 const sendAComment = (query, comment) => {
   const { article_id } = query;
+  if (comment.body === '') return Promise.reject({status: 400, msg: "Bad Request"})
   return knex("comments")
     .where({ article_id })
     .insert({
@@ -58,7 +57,7 @@ const sendAComment = (query, comment) => {
     .returning("*")
     .then(rows => {
       if (rows.length === 0)
-        return Promise.reject({ status: 404, msg: "Article Not Found" });
+        return Promise.reject({ status: 404, msg: `article ${article_id} does not exist` });
       else return rows;
     });
 };
