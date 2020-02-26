@@ -23,7 +23,14 @@ const fetchDeleteComment = params => {
   const { comment_id } = params;
   return knex("comments")
     .where({ comment_id })
-    .del();
+    .del().then(response=>{
+      if (response === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: `No comments found for id ${comment_id}`
+        });
+      }
+    })
 };
 
 module.exports = { fetchVotes, fetchDeleteComment };
