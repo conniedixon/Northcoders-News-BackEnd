@@ -158,7 +158,7 @@ describe("APP/API:", () => {
             });
             it("Status 404: user does not exist", () => {
               request(app)
-                .get("api/articles?author=supercooldude90")
+                .get("/api/articles?author=supercooldude90")
                 .expect(404)
                 .then(({ body: { msg } }) => {
                   expect(msg).to.eql("Page not found");
@@ -206,7 +206,7 @@ describe("APP/API:", () => {
             });
             it("Status 404: topic does not exist", () => {
               request(app)
-                .get("api/articles?topic=connie")
+                .get("/api/articles?topic=connie")
                 .expect(404)
                 .then(({ body: { msg } }) => {
                   expect(msg).to.eql("Page not found");
