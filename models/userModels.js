@@ -16,4 +16,17 @@ const fetchUser = query => {
     });
 };
 
-module.exports = { fetchUser };
+const checkUserExists = user => {
+  return knex("users")
+    .select("*")
+    .modify(query => {
+      if (username) query.where("username", user);
+    })
+    .then(user => {
+      if (user.length === 0) {
+        return Promise.reject({ status: 404, msg: `user ${user} not found` });
+      }
+    });
+};
+
+module.exports = { fetchUser, checkUserExists };

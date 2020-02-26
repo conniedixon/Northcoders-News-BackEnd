@@ -6,6 +6,9 @@ const {
   fetchAllArticles
 } = require("../models/articleModels");
 
+const {checkTopicExists} = require ("../models/topicsModels")
+const {checkUserExists} = require ("../models/userModels")
+
 const getArticleById = (req, res, next) => {
   const params = req.params;
   fetchArticleById(params)
@@ -21,6 +24,7 @@ const getArticleById = (req, res, next) => {
 const incrementArticleVotes = (req, res, next) => {
   const query = req.params;
   const body = req.body;
+  
   fetchArticleVotes(query, body)
     .then(article => {
       res.status(200).send({ article });
@@ -57,8 +61,12 @@ const postComment = (req, res, next) => {
 };
 
 const getAllArticles = (req, res, next) => {
-  const query = req.query;
-  fetchAllArticles(query)
+  const {topic, author} = req.query;
+  Promise.all([
+    fetchAllArticles(req.query),
+    checkTopicExists(topic),
+    checkUserExists(author)
+  ])
     .then(articles => {
       res.status(200).send({ articles });
     })
