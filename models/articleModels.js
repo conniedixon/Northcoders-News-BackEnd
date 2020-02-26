@@ -39,17 +39,11 @@ const fetchArticleVotes = (query, body) => {
     });
 };
 
-const fetchAllComments = query => {
+const fetchAllComments = (query,  { sort_by = "created_at", order = "desc" }) => {
   const { article_id } = query;
   return knex("comments")
     .select("*")
-    .where("comments.article_id", article_id);
-  // .then(comments => {
-  //   if (comments.length === 0) {
-  //     Promise.reject({ status: 404, msg: "Path not found" });
-  //   }
-  //   return comments;
-  // });
+    .where("comments.article_id", article_id).orderBy(sort_by, order);
 };
 
 const sendAComment = (query, comment) => {
@@ -62,8 +56,10 @@ const sendAComment = (query, comment) => {
       article_id: article_id
     })
     .returning("*")
-    .then(([comment]) => {
-      return comment;
+    .then(rows => {
+      if (rows.length === 0)
+        return Promise.reject({ status: 404, msg: "Article Not Found" });
+      else return rows;
     });
 };
 
