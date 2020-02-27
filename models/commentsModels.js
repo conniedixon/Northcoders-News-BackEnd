@@ -1,8 +1,6 @@
 const knex = require("../db/connection");
 
-const fetchVotes = (params, body) => {
-  const { comment_id } = params;
-  const { inc_votes } = body;
+const fetchVotes = (comment_id, inc_votes) => {
   return knex("comments")
     .select("*")
     .where({ comment_id })

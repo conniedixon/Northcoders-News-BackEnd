@@ -21,11 +21,28 @@ const getArticleById = (req, res, next) => {
     });
 };
 
+const getAllArticles = (req, res, next) => {
+  const {topic, author} = req.query;
+  console.log(topic, author)
+  Promise.all([
+    fetchAllArticles(req.query),
+    checkTopicExists(topic),
+    checkUserExists(author)
+  ])
+    .then(([articles]) => {
+      res.status(200).send({ articles });
+    })
+    .catch(err => {
+      console.log(err);
+      next(err);
+    });
+};
+
 const incrementArticleVotes = (req, res, next) => {
-  const query = req.params;
+  const params = req.params;
   const body = req.body;
   
-  fetchArticleVotes(query, body)
+  fetchArticleVotes(params, body)
     .then(article => {
       res.status(200).send({ article });
     })
@@ -36,8 +53,9 @@ const incrementArticleVotes = (req, res, next) => {
 };
 
 const getAllComments = (req, res, next) => {
-  const query = req.params;
-  fetchAllComments(query)
+  const params = req.params;
+  const query = req.query
+  fetchAllComments(params, query)
     .then(comments => {
       res.status(200).send({ comments });
     })
@@ -53,22 +71,6 @@ const postComment = (req, res, next) => {
   sendAComment(query, comment)
     .then(postedComment => {
       res.status(201).send({ postedComment });
-    })
-    .catch(err => {
-      console.log(err);
-      next(err);
-    });
-};
-
-const getAllArticles = (req, res, next) => {
-  const {topic, author} = req.query;
-  Promise.all([
-    fetchAllArticles(req.query),
-    checkTopicExists(topic),
-    checkUserExists(author)
-  ])
-    .then(articles => {
-      res.status(200).send({ articles });
     })
     .catch(err => {
       console.log(err);

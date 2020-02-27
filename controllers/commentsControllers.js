@@ -1,11 +1,11 @@
 const { fetchVotes, fetchDeleteComment } = require("../models/commentsModels");
 
 const incrementVotes = (req, res, next) => {
-  const params = req.params;
-  const body = req.body;
-  if (body && isNaN(Number(body))){
+  const { comment_id } = req.params
+  const {inc_votes} = req.body;
+  if (inc_votes && isNaN(Number(inc_votes))){
     next({ status: 400, msg: "Bad Request" })}
-  fetchVotes(params, body)
+  fetchVotes(comment_id, inc_votes)
     .then(comment => {
       res.status(200).send({ comment });
     })

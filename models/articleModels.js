@@ -20,33 +20,38 @@ const fetchArticleById = params => {
     });
 };
 
-const fetchArticleVotes = ({article_id, inc_votes = 0}, body) => {
+const fetchArticleVotes = ({article_id}, {inc_votes = 0}) => {
+  console.log(article_id, inc_votes )
   return knex("articles")
     .select("*")
-    .where({ article_id })
+    .where("article_id",article_id)
     .increment("votes", inc_votes)
     .returning("*")
     .then(response => {
+      console.log(response, '<-response')
       if (response.length === 0) {
         return Promise.reject({
           status: 404,
           msg: `No article found for id ${article_id}`
-        });
+        })
       }
-      return response[0];
+      else return response[0];
     });
 };
 
-const fetchAllComments = (query,  { sort_by = "created_at", order = "desc" }) => {
-  const { article_id } = query;
+const fetchAllComments = (params,  { sort_by = "created_at", order = "desc" }) => {
+  const { article_id } = params;
   return knex("comments")
     .select("*")
-    .where("comments.article_id", article_id).orderBy(sort_by, order);
+    .where("comments.article_id", article_id).orderBy(sort_by, order).then(response=>{
+      if (response.length===0) return Promise.reject({status: 404, msg: "Path not found"})
+      else return response
+    })
 };
 
 const sendAComment = (query, comment) => {
   const { article_id } = query;
-  if (comment.body === '') return Promise.reject({status: 400, msg: "Bad Request"})
+  if (!comment.body) return Promise.reject({status: 400, msg: "Bad Request"})
   return knex("comments")
     .where({ article_id })
     .insert({
@@ -58,7 +63,7 @@ const sendAComment = (query, comment) => {
     .then(rows => {
       if (rows.length === 0)
         return Promise.reject({ status: 404, msg: `article ${article_id} does not exist` });
-      else return rows;
+      else return rows[0];
     });
 };
 
