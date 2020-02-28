@@ -122,14 +122,6 @@ describe("APP/API:", () => {
                 expect(msg).to.eql("Bad Request");
               });
           });
-          xit("Status 405: Bad Request", () => { //ignore
-           return  request(app)
-              .get("/api/articles?smort_smy=author")
-              .expect(405)
-              .then(({ body: { msg } }) => {
-                expect(msg).to.eql("Bad request");
-              });
-          });
         });
         describe("ORDER", () => {
           it("Status 200: returns an array of articles ordered with a default of descending", () => {
@@ -138,14 +130,6 @@ describe("APP/API:", () => {
               .expect(200)
               .then(({ body: { articles } }) => {
                 expect(articles).to.be.sorted({ descending: false });
-              });
-          });
-          xit("Status 405: Bad Request", () => { //ignore
-         return   request(app)
-              .get("/api/articles?orduh=asc")
-              .expect(405)
-              .then(({ body: { msg } }) => {
-                expect(msg).to.eql("Bad request");
               });
           });
         });
@@ -360,9 +344,9 @@ describe("APP/API:", () => {
                 body: "I love posting comments"
               })
               .expect(201)
-              .then(({ body: { postedComment } }) => {
-                expect(postedComment).to.have.keys('comment')
-                expect(postedComment.comment).to.eql("I love posting comments");
+              .then(({ body: { comment } }) => {
+                expect(comment).to.have.keys('comment')
+                expect(comment.comment).to.eql("I love posting comments");
               });
           });
           it("Status 400: POST does not include required keys", () => {
@@ -396,14 +380,14 @@ describe("APP/API:", () => {
           });
           it("Status 404: Path not found", () => {
             return request(app)
-              .post("/api/700000/comments")
+              .post("/api/articles/10000/comments")
               .send({
                 username: "butter_bridge",
                 body: "I love posting comments!"
               })
               .expect(404)
               .then(({ body: { msg } }) => {
-                expect(msg).to.eql("Path not found");
+                expect(msg).to.eql("article not found");
               });
           });
         });
@@ -455,7 +439,7 @@ describe("APP/API:", () => {
             .delete("/api/comments/1")
             .expect(204);
         });
-        it("Status 405: Path not found", () => {
+        it("Status 404: Path not found", () => {
           return request(app)
             .delete("/api/commments/1")
             .expect(404)
@@ -463,6 +447,19 @@ describe("APP/API:", () => {
               expect(msg).to.eql("Path not found");
             });
         });
+        it("Status 405: Method not allowed", () => {
+          const invalidMethods = ["post", "put", "get"];
+          const methodPromises = invalidMethods.map(method => {
+            return request(app)
+              [method]("/api/comments/1")
+              .expect(405)
+              .then(({ body: { msg } }) => {
+                expect(msg).to.equal("Invalid method");
+              });
+          });
+          return Promise.all(methodPromises);
+        });
+        
       });
     });
   });

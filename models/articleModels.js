@@ -63,7 +63,6 @@ const checkArticleExists = params => {
 
 const sendAComment = (query, comment) => {
   const { article_id } = query;
-
   if (
     typeof comment.body !== "string" ||
     typeof comment.username !== "string"
