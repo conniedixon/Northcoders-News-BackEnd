@@ -42,7 +42,6 @@ const getAllArticles = (req, res, next) => {
 const incrementArticleVotes = (req, res, next) => {
   const params = req.params;
   const body = req.body;
-  
   fetchArticleVotes(params, body)
     .then(article => {
       res.status(200).send({ article });
