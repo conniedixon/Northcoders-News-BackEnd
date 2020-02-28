@@ -438,6 +438,14 @@ describe("APP/API:", () => {
               expect(comment.votes).to.eql(17);
             });
         });
+        it("Status 200: REsponds with an unchanged comment when given no inc_votes property", () => {
+          return request(app).patch("/api/comments/1").send({})
+          .expect(200)
+          .then(({ body: { comment } }) => {
+            expect(comment).to.be.an("object");
+            expect(comment.votes).to.eql(16);
+          })
+        })
         it("Status 404: Custom message, path not found", () => {
           return request(app)
             .patch("/api/comments/10000000")
