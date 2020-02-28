@@ -50,6 +50,7 @@ const fetchAllComments = (params,  { sort_by = "created_at", order = "desc" }) =
 
 
 const checkArticleExists = params => {
+  console.log("MADE IT")
   const {article_id} = params
   return knex("articles")
     .select("*")
