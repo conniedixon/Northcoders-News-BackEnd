@@ -98,7 +98,7 @@ describe("APP/API:", () => {
             expect(msg).to.eql("Path not found");
           });
       });
-      it.only("Status 400: Bad Request", () => {
+      it("Status 400: Bad Request", () => {
         return request(app).get("/api/articles?sort_by=not-a-column").expect(400).then(({body: {msg}})=>{
           expect(msg).to.eql("Bad Request")
         })
@@ -339,6 +339,11 @@ describe("APP/API:", () => {
                 );
               });
           });
+          it("Status 200: returns an array of empty comments if the article exists but there are no comments", () => {
+            return request(app).get("/api/articles/2/comments").expect(200).then(({body:{comments}})=>{
+              expect(comments).to.eql([])
+            })
+          })
           it("Status 404: Path not found", () => {
             return request(app)
               .get("/api/articles/700000/comments")

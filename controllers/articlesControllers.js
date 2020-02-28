@@ -3,7 +3,8 @@ const {
   fetchArticleVotes,
   fetchAllComments,
   sendAComment,
-  fetchAllArticles
+  fetchAllArticles,
+  checkArticleExists
 } = require("../models/articleModels");
 
 const {checkTopicExists} = require ("../models/topicsModels")
@@ -55,10 +56,11 @@ const incrementArticleVotes = (req, res, next) => {
 const getAllComments = (req, res, next) => {
   const params = req.params;
   const query = req.query
-  fetchAllComments(params, query)
-    .then(comments => {
-      res.status(200).send({ comments });
-    })
+  console.log(params)
+  Promise.all([fetchAllComments(params, query), checkArticleExists(params)] )
+  .then(response => {
+    res.status(200).send({ comments: response[0] });
+  })
     .catch(err => {
       console.log(err);
       next(err);
