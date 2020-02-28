@@ -376,8 +376,8 @@ describe("APP/API:", () => {
               })
               .expect(201)
               .then(({ body: { postedComment } }) => {
-                console.log(postedComment, '<-- test')
-                expect(postedComment).to.eql("I love posting comments");
+                expect(postedComment).to.have.keys('comment')
+                expect(postedComment.comment).to.eql("I love posting comments");
               });
           });
           it("Status 400: Bad Request", () => {

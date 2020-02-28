@@ -72,7 +72,7 @@ const postComment = (req, res, next) => {
   const comment = req.body;
   sendAComment(query, comment)
     .then(postedComment => {
-      res.status(201).send({ postedComment });
+      res.status(201).send({postedComment: {comment: postedComment}});
     })
     .catch(err => {
       console.log(err);

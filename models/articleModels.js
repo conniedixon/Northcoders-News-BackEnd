@@ -72,9 +72,10 @@ const sendAComment = (query, comment) => {
     .insert({
       body: comment.body,
       author: comment.username,
-      article_id: article_id
-    })
-    .returning("*")
+      article_id: article_id,
+      votes: 0,
+      created_at: Date.now()
+    }).returning("*")
     .then(rows => {
       if (rows.length === 0)
         return Promise.reject({ status: 404, msg: `article ${article_id} does not exist` });
