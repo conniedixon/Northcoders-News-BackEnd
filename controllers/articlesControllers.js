@@ -65,7 +65,7 @@ const postComment = (req, res, next) => {
   const comment = req.body;
   Promise.all([sendAComment(params, comment), checkArticleExists(params)])
     .then(postedComment => {
-      res.status(201).send({comment: {comment: postedComment[0]}});
+      res.status(201).send( {comment: postedComment[0]});
     })
     .catch(err => {
       if (err.code === '23503') res.status(404).send({msg: "article not found"})

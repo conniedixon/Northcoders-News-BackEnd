@@ -23,7 +23,7 @@ const fetchDeleteComment = comment_id => {
     .del().then(response=>{
       if (response === 0) {
         return Promise.reject({
-          status: 405,
+          status: 404,
           msg: `No comments found for id ${comment_id}`
         });
       }
