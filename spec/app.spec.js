@@ -346,20 +346,32 @@ describe("APP/API:", () => {
           })
           it("Status 404: Path not found", () => {
             return request(app)
-              .get("/api/articles/700000/comments")
-              .expect(404)
-              .then(({ body: { msg } }) => {
-                expect(msg).to.eql("Path not found");
-              });
+            .get("/api/articles/700000/comments")
+            .expect(404)
+            .then(({ body: { msg } }) => {
+              expect(msg).to.eql("Path not found");
+            });
           });
           it("Status 400: Bad Request", () => {
             return request(app)
-              .post("/api/articles/notAnArticle/comments")
-              .expect(400)
-              .then(({ body: { msg } }) => {
-                expect(msg).to.eql("Bad Request");
-              });
+            .post("/api/articles/notAnArticle/comments")
+            .expect(400)
+            .then(({ body: { msg } }) => {
+              expect(msg).to.eql("Bad Request");
+            });
           });
+          it("Status 200: Responds with an array of comments sorted by a default if the query does not exist", () => {
+            return request(app).get("/api/articles/1/comments?sort_by=not-a-valid-column").expect(200).then(({ body: { comments } }) => {
+              expect(comments).to.be.an("array");
+              expect(comments[0]).to.contain.keys(
+                "comment_id",
+                "votes",
+                "created_at",
+                "author",
+                "body"
+              );
+            });
+          })
         });
         describe("POST", () => {
           it("Status 201: Responds with created comment", () => {
