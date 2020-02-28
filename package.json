@@ -28,8 +28,11 @@
   "dependencies": {
     "chai": "^4.2.0",
     "chai-asserttype": "^1.0.5",
-    "knex": "^0.20.9",
-    "pg": "^7.18.1",
+    "express": "^4.17.1",
+    "knex": "^0.20.10",
+    "mocha": "^7.1.0",
+    "pg": "^7.18.2",
+    "seed": "^0.4.4",
     "supertest": "^4.0.2"
   },
   "devDependencies": {
