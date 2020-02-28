@@ -1,7 +1,6 @@
 const knex = require("../db/connection");
 
-const fetchUser = query => {
-  const { username } = query;
+const fetchUser = username => {
   return knex("users")
     .first("*")
     .where({ username })
@@ -17,14 +16,12 @@ const fetchUser = query => {
 };
 
 const checkUserExists = user => {
-  console.log(user)
   return knex("users")
     .select("*")
     .modify(query => {
       if (user) query.where("username", user);
     })
     .then(user => {
-      console.log(user)
       if (user.length === 0) {
         return Promise.reject({ status: 404, msg: `user ${user} not found` });
       } else return user
