@@ -52,8 +52,8 @@ const getAllComments = (req, res, next) => {
   const params = req.params;
   const query = req.query
   Promise.all([fetchAllComments(params, query), checkArticleExists(params)] )
-  .then(comment => {
-    res.status(200).send({ comment });
+  .then(comments => {
+    res.status(200).send({ comments });
   })
     .catch(err => {
       next(err);
@@ -64,8 +64,8 @@ const postComment = (req, res, next) => {
   const params = req.params;
   const comment = req.body;
   Promise.all([sendAComment(params, comment), checkArticleExists(params)])
-    .then(postedComment => {
-      res.status(201).send( {comment: postedComment[0]});
+    .then(comment => {
+      res.status(201).send( {comment});
     })
     .catch(err => {
       if (err.code === '23503') res.status(404).send({msg: "article not found"})
