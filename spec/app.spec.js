@@ -47,7 +47,6 @@ describe("APP/API:", () => {
             .get("/api/users/butter_bridge")
             .expect(200)
             .then(({ body: { user } }) => {
-              console.log(user);
               expect(user).to.be.an("object");
               expect(user).to.contain.keys("username", "avatar_url", "name");
             });
