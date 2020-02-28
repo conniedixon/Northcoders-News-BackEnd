@@ -68,22 +68,24 @@ const sendAComment = (query, comment) => {
 };
 
 const fetchAllArticles = ({
-  order = "desc",
   sort_by = "created_at",
+  order = "desc",
   author,
   topic
 }) => {
+  const sortBy = ["author", "title", "body", "topic", "created_at", "votes", "comment_count"]
+  if (!sortBy.includes(sort_by)) return (Promise.reject({status:400, msg:"Bad Request"}))
   return knex
     .select("articles.*")
     .from("articles")
     .count("comments.comment_id AS comment_count")
     .leftJoin("comments", "articles.article_id", "comments.article_id")
     .groupBy("articles.article_id")
-    .orderBy(sort_by, order)
     .modify(query => {
       if (topic) query.where({ "articles.topic": topic });
       if (author) query.where({ "articles.author": author });
-    });
+    })
+    .orderBy(sort_by, order)
 };
 
 module.exports = {
