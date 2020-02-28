@@ -11,7 +11,7 @@ const checkTopicExists = topic => {
     })
     .then(rows => {
       if (rows.length === 0) {
-        return Promise.reject({ status: 404, msg: `topic '${topic}' does not exist` });
+        return Promise.reject({ status: 404, msg: `topic does not exist` });
       }
       else return rows
     });

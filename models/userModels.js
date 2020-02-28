@@ -23,7 +23,7 @@ const checkUserExists = user => {
     })
     .then(user => {
       if (user.length === 0) {
-        return Promise.reject({ status: 404, msg: `user ${user} not found` });
+        return Promise.reject({ status: 404, msg: `user not found` });
       } else return user
     });
 };

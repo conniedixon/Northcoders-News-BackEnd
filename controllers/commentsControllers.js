@@ -5,7 +5,6 @@ const incrementVotes = (req, res, next) => {
 
   if (inc_votes && isNaN(Number(inc_votes))){
     next({ status: 400, msg: "Bad Request" })}
-
         fetchVotes(req.params, req.body)
           .then(comment => {
             res.status(200).send({ comment });
