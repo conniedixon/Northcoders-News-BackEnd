@@ -52,8 +52,8 @@ const getAllComments = (req, res, next) => {
   const params = req.params;
   const query = req.query
   Promise.all([fetchAllComments(params, query), checkArticleExists(params)] )
-  .then(response => {
-    res.status(200).send({ comments: response[0] });
+  .then(comment => {
+    res.status(200).send({ comment });
   })
     .catch(err => {
       next(err);

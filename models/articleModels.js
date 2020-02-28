@@ -82,7 +82,7 @@ const sendAComment = (query, comment) => {
     .then(rows => {
       if (rows.length === 0)
         return Promise.reject({ status: 404, msg: `article ${article_id} does not exist` });
-      else return rows[0].body
+      else return rows[0]
   
     });
 };
