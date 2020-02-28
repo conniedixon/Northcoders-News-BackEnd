@@ -65,8 +65,15 @@ const checkArticleExists = params => {
 }
 
 const sendAComment = (query, comment) => {
+  console.log(comment.body, comment.username)
+  if (
+    typeof comment.body !== "string" ||
+    typeof comment.username !== "string"
+  ) return Promise.reject({
+      status: 400,
+      msg: "Bad Request"
+    });
   const { article_id } = query;
-  if (!comment.body) return Promise.reject({status: 400, msg: "Bad Request"})
   return knex("comments")
     .where({ article_id })
     .insert({
@@ -74,7 +81,6 @@ const sendAComment = (query, comment) => {
       author: comment.username,
       article_id: article_id,
       votes: 0,
-      created_at: Date.now()
     }).returning("*")
     .then(rows => {
       if (rows.length === 0)

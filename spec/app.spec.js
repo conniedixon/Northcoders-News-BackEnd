@@ -380,6 +380,11 @@ describe("APP/API:", () => {
                 expect(postedComment.comment).to.eql("I love posting comments");
               });
           });
+          it("Status 400: POST does not include required keys", () => {
+            return request(app).post("/api/articles/3/comments").send({username: 1275}).expect(400).then(({body: {msg}})=>{
+              expect(msg).to.eql("Bad Request")
+            })
+          })
           it("Status 400: Bad Request", () => {
             return request(app)
               .post("/api/articles/notAnArticle/comments")
