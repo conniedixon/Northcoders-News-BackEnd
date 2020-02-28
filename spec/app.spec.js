@@ -361,16 +361,9 @@ describe("APP/API:", () => {
             });
           });
           it("Status 200: Responds with an array of comments sorted by a default if the query does not exist", () => {
-            return request(app).get("/api/articles/1/comments?sort_by=not-a-valid-column").expect(200).then(({ body: { comments } }) => {
-              expect(comments).to.be.an("array");
-              expect(comments[0]).to.contain.keys(
-                "comment_id",
-                "votes",
-                "created_at",
-                "author",
-                "body"
-              );
-            });
+            return request(app).get("/api/articles/1/comments?sort_by=not-a-valid-column").expect(400).then(({body: {msg}})=> {
+              expect(msg).to.eql("Bad Request")
+            })
           })
         });
         describe("POST", () => {
@@ -383,8 +376,8 @@ describe("APP/API:", () => {
               })
               .expect(201)
               .then(({ body: { postedComment } }) => {
-                expect(postedComment).to.be.an("object");
-                expect(postedComment.body).to.eql("I love posting comments");
+                console.log(postedComment, '<-- test')
+                expect(postedComment).to.eql("I love posting comments");
               });
           });
           it("Status 400: Bad Request", () => {

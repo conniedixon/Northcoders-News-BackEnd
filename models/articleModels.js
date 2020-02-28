@@ -41,6 +41,8 @@ const fetchArticleVotes = ({article_id}, {inc_votes = 0}) => {
 
 const fetchAllComments = (params,  { sort_by = "created_at", order = "desc" }) => {
   const { article_id } = params;
+  const sortBy = ["author", "title", "body", "topic", "created_at", "votes", "comment_count"]
+  if (!sortBy.includes(sort_by)) return (Promise.reject({status:400, msg:"Bad Request"}))
   return knex("comments")
   .select("*").returning("*")
   .where("comments.article_id", article_id).orderBy(sort_by, order)
@@ -76,7 +78,8 @@ const sendAComment = (query, comment) => {
     .then(rows => {
       if (rows.length === 0)
         return Promise.reject({ status: 404, msg: `article ${article_id} does not exist` });
-      else return rows[0];
+      else return rows[0].body
+  
     });
 };
 
