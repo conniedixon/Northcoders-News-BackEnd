@@ -98,6 +98,11 @@ describe("APP/API:", () => {
             expect(msg).to.eql("Path not found");
           });
       });
+      it("Status 400: Bad Request", () => {
+        return request(app).get("/api/articles?sort_by=not-a-column").expect(400).then(({body: {msg}})=>{
+          expect(msg).to.eql("Bad Request")
+        })
+      })
       describe("QUERIES", () => {
         describe("SORT_BY", () => {
           it("Status 200: returns an array of articles sorted by a default of date", () => {
