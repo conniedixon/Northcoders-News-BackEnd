@@ -470,7 +470,7 @@ describe("APP/API:", () => {
             .delete("/api/comments/1")
             .expect(204);
         });
-        it("Status 404: Path not found", () => {
+        it("Status 405: Path not found", () => {
           return request(app)
             .delete("/api/commments/1")
             .expect(404)
