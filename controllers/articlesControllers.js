@@ -11,20 +11,18 @@ const {checkTopicExists} = require ("../models/topicsModels")
 const {checkUserExists} = require ("../models/userModels")
 
 const getArticleById = (req, res, next) => {
-  const params = req.params;
-  fetchArticleById(params)
+  const {article_id} = req.params;
+  fetchArticleById(article_id)
     .then(article => {
       res.status(200).send({ article });
     })
     .catch(err => {
-      console.log(err);
       next(err);
     });
 };
 
 const getAllArticles = (req, res, next) => {
   const {topic, author} = req.query;
-  console.log(topic, author)
   Promise.all([
     fetchAllArticles(req.query),
     checkTopicExists(topic),
@@ -34,20 +32,18 @@ const getAllArticles = (req, res, next) => {
       res.status(200).send({ articles });
     })
     .catch(err => {
-      console.log(err);
       next(err);
     });
 };
 
 const incrementArticleVotes = (req, res, next) => {
-  const params = req.params;
-  const body = req.body;
-  fetchArticleVotes(params, body)
+  const {article_id} = req.params;
+  const {inc_votes} = req.body;
+  fetchArticleVotes(article_id, inc_votes)
     .then(article => {
       res.status(200).send({ article });
     })
     .catch(err => {
-      console.log(err);
       next(err);
     });
 };
@@ -55,13 +51,11 @@ const incrementArticleVotes = (req, res, next) => {
 const getAllComments = (req, res, next) => {
   const params = req.params;
   const query = req.query
-  console.log(params)
   Promise.all([fetchAllComments(params, query), checkArticleExists(params)] )
   .then(response => {
     res.status(200).send({ comments: response[0] });
   })
     .catch(err => {
-      console.log(err);
       next(err);
     });
 };
@@ -74,7 +68,6 @@ const postComment = (req, res, next) => {
       res.status(201).send({postedComment: {comment: postedComment[0]}});
     })
     .catch(err => {
-      console.log(err);
       next(err);
     });
 };

@@ -1,7 +1,6 @@
 const knex = require("../db/connection");
 
-const fetchArticleById = params => {
-  const { article_id } = params;
+const fetchArticleById = (article_id) => {
   return knex
   .first("articles.*")
   .from("articles")
@@ -20,15 +19,13 @@ const fetchArticleById = params => {
   });
 };
 
-const fetchArticleVotes = ({article_id}, {inc_votes = 0}) => {
-  console.log(article_id, inc_votes )
+const fetchArticleVotes = (article_id, inc_votes = 0) => {
   return knex("articles")
   .select("*")
   .where("article_id",article_id)
   .increment("votes", inc_votes)
   .returning("*")
   .then(response => {
-    console.log(response, '<-response')
     if (response.length === 0) {
       return Promise.reject({
         status: 404,
@@ -50,7 +47,6 @@ const fetchAllComments = (params,  { sort_by = "created_at", order = "desc" }) =
 
 
 const checkArticleExists = params => {
-  console.log("MADE IT")
   const {article_id} = params
   return knex("articles")
     .select("*")
@@ -66,7 +62,8 @@ const checkArticleExists = params => {
 }
 
 const sendAComment = (query, comment) => {
-  console.log(comment.body, comment.username)
+  const { article_id } = query;
+
   if (
     typeof comment.body !== "string" ||
     typeof comment.username !== "string"
@@ -74,7 +71,7 @@ const sendAComment = (query, comment) => {
       status: 400,
       msg: "Bad Request"
     });
-  const { article_id } = query;
+
   return knex("comments")
     .where({ article_id })
     .insert({
@@ -99,6 +96,7 @@ const fetchAllArticles = ({
 }) => {
   const sortBy = ["author", "title", "body", "topic", "created_at", "votes", "comment_count"]
   if (!sortBy.includes(sort_by)) return (Promise.reject({status:400, msg:"Bad Request"}))
+  
   return knex
     .select("articles.*")
     .from("articles")
