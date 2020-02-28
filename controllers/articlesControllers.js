@@ -65,7 +65,7 @@ const postComment = (req, res, next) => {
   const comment = req.body;
   Promise.all([sendAComment(query, comment), checkArticleExists(query)])
     .then(postedComment => {
-      res.status(201).send({postedComment: {comment: postedComment[0]}});
+      res.status(201).send({comment: {comment: postedComment[0]}});
     })
     .catch(err => {
       next(err);
