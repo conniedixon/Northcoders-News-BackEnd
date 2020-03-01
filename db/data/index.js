@@ -6,8 +6,8 @@ const testPath = require("./test-data");
 const data = {
   development: devPath,
   test: testPath,
+  production: devPath
 };
 
-data.production = data.development;
 
 module.exports = data[ENV];
