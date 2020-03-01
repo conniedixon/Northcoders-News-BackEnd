@@ -13,7 +13,7 @@ exports.up = function(knex) {
     commentsTable
       .timestamp("created_at", { precision: 6 })
       .defaultTo(knex.fn.now(6));
-    commentsTable.string("body").notNullable();
+    commentsTable.text("body").notNullable();
   });
 };
 
