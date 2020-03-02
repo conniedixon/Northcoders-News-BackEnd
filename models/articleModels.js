@@ -36,13 +36,16 @@ const fetchArticleVotes = (article_id, inc_votes = 0) => {
   });
 };
 
-const fetchAllComments = (params,  { sort_by = "created_at", order = "desc" }) => {
+const fetchAllComments = (params,  { sort_by = "created_at", order = "desc", limit = 10, p }) => {
   const { article_id } = params;
   const sortBy = ["author", "title", "body", "topic", "created_at", "votes", "comment_count"]
   if (!sortBy.includes(sort_by)) return (Promise.reject({status:400, msg:"Bad Request"}))
   return knex("comments")
   .select("*").returning("*")
-  .where("comments.article_id", article_id).orderBy(sort_by, order)
+  .where("comments.article_id", article_id).modify(query => {
+    if (limit) query.limit(limit);
+    if (limit && p) query.offset((p - 1) * limit);
+  }).orderBy(sort_by, order)
 };
 
 

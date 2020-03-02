@@ -330,14 +330,14 @@ describe("APP/API:", () => {
             })
           })
           describe("PAGINATION/LIMIT", () => {
-            it.only("Status 200: Accepts a pagination and response limit", () => {
-              return request(app).get("/api/articles/2/comments?limit=3,p=1").expect(200).then(({body: {comments}})=>{
-                expect(articles).to.have.length(3)
+            it("Status 200: Accepts a pagination and response limit", () => {
+              return request(app).get("/api/articles/1/comments?limit=3,p=1").expect(200).then(({body: {comments}})=>{
+                expect(comments).to.have.length(3)
               })
             })
-            it.only("Status 200: Defualts to 1 page and 10 comments", () => {
-              return request(app).get("/api/articles/2/comments").expect(200).then(({body: {comments}})=>{
-                expect(articles).to.have.length(10)
+            it("Status 200: Defualts to 1 page and 10 comments", () => {
+              return request(app).get("/api/articles/1/comments").expect(200).then(({body: {comments}})=>{
+                expect(comments).to.have.length(10)
               })
             })
           })
