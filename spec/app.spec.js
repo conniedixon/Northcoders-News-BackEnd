@@ -12,6 +12,7 @@ describe("APP/API:", () => {
   after(() => connection.destroy());
   it("Status 200: returns a JSON object of all possible endpoints", () => {
     return request(app).get("/api").expect(200)
+    })
   })
   it("Status 404: Path not found", () => {
     return request(app)
@@ -253,6 +254,11 @@ describe("APP/API:", () => {
               expect(msg).to.eql("Bad Request");
             });
         });
+        it.only("Status 200: Accepts a pagination and response limit", () => {
+          return request(app).get("/api/articles/1?limit=10,p=1").expect(200).then(({body})=>{
+            expect(body).to.have.length(10)
+          })
+        })
       });
       describe("PATCH", () => {
         it("Status 200: Responds with an object with relevant values and increments ", () => {
