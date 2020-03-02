@@ -13,7 +13,7 @@ describe("APP/API:", () => {
   it("Status 200: returns a JSON object of all possible endpoints", () => {
     return request(app).get("/api").expect(200)
     })
-  })
+  
   it("Status 404: Path not found", () => {
     return request(app)
       .get("/invalid")
@@ -107,6 +107,18 @@ describe("APP/API:", () => {
         })
       })
       describe("QUERIES", () => {
+        describe("PAGINATION/LIMIT", () => {
+          it("Status 200: Accepts a pagination and response limit", () => {
+            return request(app).get("/api/articles?limit=3,p=1").expect(200).then(({body: {articles}})=>{
+              expect(articles).to.have.length(3)
+            })
+          })
+          it("Status 200: Defualts to 1 page and 10 comments", () => {
+            return request(app).get("/api/articles").expect(200).then(({body: {articles}})=>{
+              expect(articles).to.have.length(10)
+            })
+          })
+        })
         describe("SORT_BY", () => {
           it("Status 200: returns an array of articles sorted by a default of date", () => {
             return request(app)
@@ -253,11 +265,6 @@ describe("APP/API:", () => {
             .then(({ body: { msg } }) => {
               expect(msg).to.eql("Bad Request");
             });
-        });
-        it.only("Status 200: Accepts a pagination and response limit", () => {
-          return request(app).get("/api/articles/1?limit=10,p=1").expect(200).then(({body})=>{
-            expect(body).to.have.length(10)
-          })
         })
       });
       describe("PATCH", () => {
@@ -467,8 +474,7 @@ describe("APP/API:", () => {
           });
           return Promise.all(methodPromises);
         });
-        
-      });
+      })
     });
   });
 });
