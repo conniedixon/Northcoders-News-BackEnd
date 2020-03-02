@@ -1,10 +1,13 @@
 const express = require("express");
 const app = express();
-app.use(express.json());
+const cors = require('cors')
 
 const { apiRouter } = require("./routers/apiRouter.js");
 
 app.use("/api", apiRouter)
+app.use(express.json());
+app.use(cors())
+// app.options('*', cors())
 
 app.use("/*", (req, res, next) => {
   res.status(404).send({ msg: "Path not found" });
