@@ -15,18 +15,17 @@ node listen.js
 
 # Avaliable Endpoints
 
+### GET - /api
+
+https://ced-nc-news.herokuapp.com/api
+
+Responds with an array of all the possible actions and endpoints on this server.
+
 ### GET - /api/topics
 
 https://ced-nc-news.herokuapp.com/api/topics
 
 Responds with an array of all topics on a key of topics. 
-
-
-### GET - /api/users/
-
-https://ced-nc-news.herokuapp.com/api/users
-
-Responds with an array of all users on a key of users.
 
 ### GET - /api/articles/
 
