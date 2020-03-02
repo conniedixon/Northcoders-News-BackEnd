@@ -2,7 +2,7 @@
 
 A RESTful server built using express, knex and axios. Gives access to databases containing articles, comments, topics and users
 
-##### Hosted on heroku at https://ced-nc-news.herokuapp.com/api
+### Hosted on heroku at https://ced-nc-news.herokuapp.com/api
 
 ## Installation
 

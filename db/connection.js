@@ -8,4 +8,4 @@ const dbConfig =  ENV === 'production'
 const knex = knexMaker(dbConfig);
  
 
-module.exports = knex(dbConfig);
+module.exports = knex
