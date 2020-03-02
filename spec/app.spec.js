@@ -10,6 +10,9 @@ const connection = require("../db/connection");
 describe("APP/API:", () => {
   beforeEach(() => connection.seed.run());
   after(() => connection.destroy());
+  it("Status 200: returns a JSON object of all possible endpoints", () => {
+    return request(app).get("/api").expect(200)
+  })
   it("Status 404: Path not found", () => {
     return request(app)
       .get("/invalid")
