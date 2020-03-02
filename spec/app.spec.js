@@ -329,6 +329,18 @@ describe("APP/API:", () => {
               expect(comments).to.eql([])
             })
           })
+          describe("PAGINATION/LIMIT", () => {
+            it.only("Status 200: Accepts a pagination and response limit", () => {
+              return request(app).get("/api/articles/2/comments?limit=3,p=1").expect(200).then(({body: {comments}})=>{
+                expect(articles).to.have.length(3)
+              })
+            })
+            it.only("Status 200: Defualts to 1 page and 10 comments", () => {
+              return request(app).get("/api/articles/2/comments").expect(200).then(({body: {comments}})=>{
+                expect(articles).to.have.length(10)
+              })
+            })
+          })
           it("Status 404: Path not found", () => {
             return request(app)
             .get("/api/articles/700000/comments")
