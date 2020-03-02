@@ -345,7 +345,7 @@ describe("APP/API:", () => {
               })
               .expect(201)
               .then(({ body: { comment } }) => {
-                expect(comment).to.eql("I love posting comments");
+                expect(comment.body).to.eql("I love posting comments");
               });
           });
           it("Status 400: POST does not include required keys", () => {
